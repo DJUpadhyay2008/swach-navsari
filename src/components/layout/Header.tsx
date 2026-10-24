@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
+import { useAuth } from '@/features/auth';
 import {
   Sparkles,
   MapPin,
@@ -13,21 +14,29 @@ import {
   Menu,
   X,
   Database,
+  FileText,
+  LogIn,
+  LogOut,
+  User,
 } from 'lucide-react';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const backendConfigured = isSupabaseConfigured();
+  const { user, profile, signOut } = useAuth();
 
   const navLinks = [
     { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
     { label: 'Report Issue', path: '/report', icon: <ClipboardList className="w-4 h-4" /> },
+    { label: 'My Reports', path: '/my-reports', icon: <FileText className="w-4 h-4" /> },
     { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
     { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
     { label: 'Municipal Portal', path: '/admin', icon: <ShieldCheck className="w-4 h-4" /> },
     { label: 'Worker Portal', path: '/worker', icon: <HardHat className="w-4 h-4" /> },
   ];
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || 'Citizen';
 
   return (
     <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800/80">
@@ -59,7 +68,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -80,8 +89,8 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right Action & Backend indicator */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Right Action & Backend / Auth indicators */}
+          <div className="hidden md:flex items-center gap-3">
             <div
               className={cn(
                 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border font-medium transition-colors',
@@ -104,6 +113,32 @@ export function Header() {
                 )}
               />
             </div>
+
+            {/* Auth Session Status */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200">
+                  <User className="w-3 h-3 text-swach-400" />
+                  <span className="max-w-[100px] truncate">{displayName}</span>
+                </span>
+                <button
+                  onClick={() => signOut()}
+                  className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900 transition-colors"
+                  title="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Citizen Sign In</span>
+              </Link>
+            )}
+
             <Link
               to="/report"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-swach-600 to-swach-500 text-white shadow-md shadow-swach-500/20 hover:from-swach-500 hover:to-swach-400 transition-all active:scale-95"
@@ -114,7 +149,7 @@ export function Header() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex md:hidden">
+          <div className="flex lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 focus:outline-none"
@@ -128,7 +163,7 @@ export function Header() {
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 pt-2 pb-4 space-y-1">
+        <div className="lg:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 pt-2 pb-4 space-y-2">
           {navLinks.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -148,6 +183,32 @@ export function Header() {
               </Link>
             );
           })}
+
+          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            {user ? (
+              <div className="flex items-center justify-between w-full">
+                <span className="text-xs text-slate-300">Signed in as {displayName}</span>
+                <button
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-xs text-rose-400 font-medium hover:underline flex items-center gap-1"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/auth"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-800 text-white"
+              >
+                Citizen Sign In / Register
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </header>

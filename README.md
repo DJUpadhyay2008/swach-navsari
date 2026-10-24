@@ -247,41 +247,40 @@ Navigate to the **SQL Editor** in your Supabase dashboard and run the migration 
 2. `supabase/migrations/20260224000002_lifecycle_and_functions.sql`
 3. `supabase/migrations/20260224000003_rls_policies.sql`
 4. `supabase/migrations/20260224000004_storage_security.sql`
-5. `supabase/seed.sql`
+5. `supabase/migrations/20260224000005_phase2_citizen_reporting.sql`
+6. `supabase/seed.sql`
 
 ---
 
 ## 9. Verification & Scripts
 
-| Command | Action |
-| :--- | :--- |
-| `npm run dev` | Launch local Vite development server |
-| `npm run build` | Compile TypeScript and produce production bundle |
-| `npm run test` | Run Vitest test suite |
-| `npm run lint` | Run ESLint across code and configs |
+| Command | Action | Current Status |
+| :--- | :--- | :--- |
+| `npm run test` | Run Vitest test suite | **30 of 30 tests passing** across 6 test suites |
+| `npm run lint` | Run ESLint across code and configs | **0 errors, 0 warnings** |
+| `npm run build` | Compile TypeScript and produce production bundle | **Build successful** (Vite built in ~2.2s) |
+| `npm run dev` | Launch local Vite development server | Ready for local interaction |
 
 ---
 
-## 10. Navsari Civic Context & Next Steps
+## 10. Phase 2: Citizen Complaint Reporting Implementation
 
-### Navsari Civic Coverage
-The platform model is built around Navsari's 13 municipal wards:
-- **Ward 1:** Gandevi Road & Grid Substation
-- **Ward 2:** Dandi Heritage Corridor & Viraval
-- **Ward 3:** Vijalpore Heritage Sector
-- **Ward 4:** Lunsikui & Sardar Complex
-- **Ward 5:** Station Road & Tower Bazaar
-- **Ward 6:** Junathana & Old City Central
-- **Ward 7:** Dudhia Talav & Fuwara Lakefront
-- **Ward 8:** Chhapra Road & GIDC Industrial
-- **Ward 9:** Kabilpore Civic Extension
-- **Ward 10:** Jalalpore & Ashapuri Temple Sector
-- **Ward 11:** Shantadevi Road & Civil Hospital
-- **Ward 12:** Kaliawadi Residential Zone
-- **Ward 13:** Sayaji Vaibhav Library & Tarota
-
-### Phase 2 Roadmap (Upcoming)
-- Integration of live Supabase Auth UI (Email / Phone OTP login).
-- Image upload pipeline with client-side compression and signed URL generation.
-- Real-time notification subscriptions (`supabase_realtime`) for worker task dispatches.
-- Computer vision model integration for automated waste classification and volume estimation.
+Phase 2 completes the first vertical slice of S.W.A.C.H. Navsari:
+1. **Supabase Auth Integration (`useAuth`, `AuthProvider`):** Real user sessions with reactive state change listeners, sign-in, sign-up with Navsari ward and profile registration, and derived identity directly from `session.user`.
+2. **Citizen Complaint Reporting Form (`/report`):**
+   - Category selector with Navsari civic context and Gujarati labels.
+   - Geolocation integration: optional browser GPS acquisition with error/denial fallback to manual street/locality address. Never mandates GPS.
+   - Private photo evidence uploader: max 3 photos, 10MB limit, JPEG/PNG/WEBP.
+   - Atomic rollback: cleans up uploaded storage objects if the subsequent database operation encounters an error.
+3. **My Reports Dashboard (`/my-reports`):**
+   - Lists reports submitted by the authenticated citizen.
+   - Fetches and displays secure image thumbnails generated via time-limited signed URLs (`createSignedUrl`) from the private `report-evidence` bucket.
+   - Status badges, priority indicators, and responsive card layouts.
+4. **Report Detail & Tracking (`/reports/:id`):**
+   - Real-time complaint detail, photo lightbox gallery, Google Maps navigation coordinate link.
+   - Status history lifecycle trail from `report_status_history`.
+   - Accessible tracking from safe Complaint Reference (e.g. `NAV-2026-00101`).
+5. **Database Migration 05 (`20260224000005_phase2_citizen_reporting.sql`):**
+   - Relaxes GPS coordinate not-null constraints with a composite location check (`chk_report_location_provided`).
+   - Trigger `trg_record_initial_report_status` auto-recording initial 'submitted' audit trail on report insert.
+   - Storage cleanup policy `report_evidence_owner_delete_policy` allowing citizens to delete their own uploaded files in case of aborts.

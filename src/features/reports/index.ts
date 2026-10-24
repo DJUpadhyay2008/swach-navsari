@@ -1,4 +1,5 @@
 export * from '@/lib/validation/reports';
+export * from './reportsService';
 import type { ComplaintStatus } from '@/types';
 
 export interface TransitionRequest {

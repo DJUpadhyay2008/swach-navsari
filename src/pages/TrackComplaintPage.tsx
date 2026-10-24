@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'react-router-dom';
 import { complaintTrackSchema, ComplaintTrackInput } from '@/lib/validation/reports';
 import { isSupabaseConfigured, getSupabase } from '@/lib/supabase/client';
 import { STATUS_CONFIG, PRIORITY_CONFIG, formatDate } from '@/lib/utils';
@@ -16,6 +17,7 @@ import {
   MapPin,
   Calendar,
   Info,
+  ArrowRight,
 } from 'lucide-react';
 
 interface DisplayReport {
@@ -316,6 +318,15 @@ export function TrackComplaintPage() {
                     {reportResult.resolved_at ? formatDate(reportResult.resolved_at) : 'In Progress'}
                   </div>
                 </div>
+              </div>
+
+              {/* Detail link */}
+              <div className="pt-4 border-t border-slate-800 flex justify-end">
+                <Link to={`/reports/${reportResult.complaint_id}`}>
+                  <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    View Detailed History &amp; Evidence
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
