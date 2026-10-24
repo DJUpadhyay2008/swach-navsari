@@ -194,70 +194,77 @@ export function AdminOverviewPage() {
             </div>
           </div>
 
-          {/* SVG Trend Line Chart */}
-          <div className="h-56 w-full pt-2">
-            <svg className="w-full h-full overflow-visible" viewBox="0 0 500 180" preserveAspectRatio="none">
-              {/* Horizontal grid lines */}
-              <line x1="0" y1="30" x2="500" y2="30" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="80" x2="500" y2="80" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="130" x2="500" y2="130" stroke="#f1f5f9" strokeWidth="1" />
+          {/* SVG Trend Line Chart with Y and X axes */}
+          <div className="flex items-stretch gap-2 h-56 pt-2">
+            {/* Y-axis labels */}
+            <div className="flex flex-col justify-between text-[10px] text-slate-400 font-mono py-1 text-right w-6 shrink-0">
+              <span>200</span>
+              <span>100</span>
+              <span>0</span>
+            </div>
 
-              {/* Area Under Submitted */}
-              <defs>
-                <linearGradient id="submittedGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
-                </linearGradient>
-                <linearGradient id="resolvedGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
+            {/* SVG Canvas */}
+            <div className="flex-1 flex flex-col justify-between">
+              <svg className="w-full h-44 overflow-visible" viewBox="0 0 500 160" preserveAspectRatio="none">
+                {/* Horizontal grid lines */}
+                <line x1="0" y1="20" x2="500" y2="20" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="0" y1="80" x2="500" y2="80" stroke="#f1f5f9" strokeWidth="1" />
+                <line x1="0" y1="140" x2="500" y2="140" stroke="#f1f5f9" strokeWidth="1" />
 
-              <path
-                d="M 20 120 Q 120 70 200 90 T 360 40 T 480 70 L 480 160 L 20 160 Z"
-                fill="url(#submittedGrad)"
-              />
-              <path
-                d="M 20 120 Q 120 70 200 90 T 360 40 T 480 70"
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
+                {/* Gradients */}
+                <defs>
+                  <linearGradient id="submittedGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                  </linearGradient>
+                  <linearGradient id="resolvedGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
 
-              {/* Area Under Resolved */}
-              <path
-                d="M 20 140 Q 120 120 200 100 T 360 60 T 480 50 L 480 160 L 20 160 Z"
-                fill="url(#resolvedGrad)"
-              />
-              <path
-                d="M 20 140 Q 120 120 200 100 T 360 60 T 480 50"
-                fill="none"
-                stroke="#10b981"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
+                {/* Area Under Submitted */}
+                <path
+                  d="M 30 110 Q 140 60 250 85 T 470 50 L 470 140 L 30 140 Z"
+                  fill="url(#submittedGrad)"
+                />
+                <path
+                  d="M 30 110 Q 140 60 250 85 T 470 50"
+                  fill="none"
+                  stroke="#3b82f6"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
 
-              {/* Data points */}
-              <circle cx="20" cy="120" r="4" fill="#3b82f6" />
-              <circle cx="200" cy="90" r="4" fill="#3b82f6" />
-              <circle cx="360" cy="40" r="4" fill="#3b82f6" />
-              <circle cx="480" cy="70" r="4" fill="#3b82f6" />
+                {/* Area Under Resolved */}
+                <path
+                  d="M 30 130 Q 140 110 250 95 T 470 40 L 470 140 L 30 140 Z"
+                  fill="url(#resolvedGrad)"
+                />
+                <path
+                  d="M 30 130 Q 140 110 250 95 T 470 40"
+                  fill="none"
+                  stroke="#10b981"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
 
-              <circle cx="20" cy="140" r="4" fill="#10b981" />
-              <circle cx="200" cy="100" r="4" fill="#10b981" />
-              <circle cx="360" cy="60" r="4" fill="#10b981" />
-              <circle cx="480" cy="50" r="4" fill="#10b981" />
-            </svg>
+                {/* Data points */}
+                <circle cx="30" cy="110" r="3.5" fill="#3b82f6" />
+                <circle cx="250" cy="85" r="3.5" fill="#3b82f6" />
+                <circle cx="470" cy="50" r="3.5" fill="#3b82f6" />
 
-            {/* X-axis labels */}
-            <div className="flex justify-between text-[11px] text-slate-400 pt-2 px-2">
-              <span>1 Oct</span>
-              <span>5 Oct</span>
-              <span>10 Oct</span>
-              <span>15 Oct</span>
-              <span>20 Oct</span>
+                <circle cx="30" cy="130" r="3.5" fill="#10b981" />
+                <circle cx="250" cy="95" r="3.5" fill="#10b981" />
+                <circle cx="470" cy="40" r="3.5" fill="#10b981" />
+              </svg>
+
+              {/* X-axis labels matching mockup */}
+              <div className="flex justify-between text-[11px] text-slate-400 pt-1 px-4">
+                <span>5 Oct</span>
+                <span>10 Oct</span>
+                <span>15 Oct</span>
+              </div>
             </div>
           </div>
         </div>

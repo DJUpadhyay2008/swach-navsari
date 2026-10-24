@@ -272,12 +272,13 @@ Evidence files are stored in **private Supabase Storage buckets**:
 
 ### B. Municipal Dashboard (Desktop Operations Deck)
 1. **Executive Workspace Theme:**
-   - Crisp light workspace (`#F8FAFC` / `bg-slate-50`), pure white cards (`#FFFFFF`, `border-slate-200`), dark navy sidebar (`#0F172A`), and official header (`Rakesh Desai • Ward Officer`).
+   - Pure light workspace (`#F8FAFC` / `bg-slate-50`), pure white cards (`#FFFFFF`, `border-slate-200`), dark navy sidebar (`#0F172A`), and official header (`Rakesh Desai • Ward Officer`).
+   - Clean light palette across all portals (Citizen, Municipal, and Worker) matching the design mockups with zero dark-mode overrides.
 2. **Overview Dashboard (`/admin`):**
    - Top 4 KPI Cards: **Open Reports (124)**, **Unassigned (28)**, **Overdue (16)**, **Resolved This Month (312)**.
-   - **Reports Trend Chart:** Line chart comparing Submitted vs. Resolved incident flow over 30 days.
-   - **Category Distribution Chart:** Donut chart with Total **523** center metric and color-coded proportional breakdown (Garbage Dumping 38%, Overflowing Bin 26%, Street Litter 18%, Drain Waste 11%, Other 7%).
-   - **Recent Reports Table:** Real-time table with Complaint ID, Category, Location, Status pill badges, Priority tags, and dates.
+   - **Reports Trend Chart:** Smooth SVG line chart comparing Submitted vs. Resolved incident flow with Y-axis scale (0, 100, 200) and exact dates (5 Oct, 10 Oct, 15 Oct).
+   - **Category Distribution Chart:** Donut chart with Total **523** center callout and proportional breakdown matching mockup (Garbage Dumping 38%, Overflowing Bin 26%, Street Litter 18%, Drain Waste 11%, Other 7%).
+   - **Recent Reports Table:** Real-time table with Complaint ID (`NMC202610120457`), Category, Location, Status pill badges, Priority tags, and dates.
 3. **City Map & Hotspots (`/admin/map`):**
    - Geospatial SVG map canvas coupled with a **Hotspots** ranking sidebar (Bus Stand Area, GIDC Area, Market Area, College Road, Lunsikui Area) highlighting unresolved counts and urgency tiers.
 

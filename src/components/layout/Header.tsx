@@ -85,26 +85,24 @@ export function Header() {
   const displayName = profile?.full_name || user?.email?.split('@')[0] || roleLabel;
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-lg border-b border-slate-800/80">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Civic Branding */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-emerald-400">
-                <Leaf className="w-5 h-5 fill-emerald-400/20 text-emerald-400" />
-              </div>
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm shadow-emerald-500/20 group-hover:bg-emerald-500 transition-colors">
+              <Leaf className="w-5 h-5 fill-white/20 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-base tracking-tight text-white group-hover:text-emerald-300 transition-colors">
+                <span className="font-bold text-base tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">
                   My Clean Navsari
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
                   NMC
                 </span>
               </div>
-              <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+              <div className="flex items-center gap-1 text-[11px] text-slate-500 font-medium">
                 <span>Clean City • Stronger Community</span>
               </div>
             </div>
@@ -119,10 +117,10 @@ export function Header() {
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                    'flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors',
                     isActive
-                      ? 'bg-swach-500/10 text-swach-400 border border-swach-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                   )}
                 >
                   {item.icon}
@@ -138,21 +136,16 @@ export function Header() {
               className={cn(
                 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border font-medium transition-colors',
                 backendConfigured
-                  ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
-                  : 'bg-slate-900 border-slate-800 text-slate-400'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  : 'bg-slate-100 border-slate-200 text-slate-500'
               )}
-              title={
-                backendConfigured
-                  ? 'Supabase backend configured'
-                  : 'Local frontend mode (no live backend credentials)'
-              }
             >
               <Database className="w-3 h-3 text-current" />
               <span>{backendConfigured ? 'Connected' : 'Local Prep'}</span>
               <span
                 className={cn(
                   'w-1.5 h-1.5 rounded-full',
-                  backendConfigured ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
+                  backendConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
                 )}
               />
             </div>
@@ -160,16 +153,16 @@ export function Header() {
             {/* Auth Session Status */}
             {user ? (
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200">
-                  <User className="w-3 h-3 text-swach-400" />
-                  <span className="max-w-[100px] truncate">{displayName}</span>
-                  <span className="text-[10px] font-semibold px-1 py-0.2 rounded bg-slate-800 text-slate-400 uppercase">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-800">
+                  <User className="w-3 h-3 text-emerald-600" />
+                  <span className="max-w-[100px] truncate font-medium">{displayName}</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-white text-slate-600 border border-slate-200 uppercase">
                     {roleLabel}
                   </span>
                 </span>
                 <button
                   onClick={() => signOut()}
-                  className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900 transition-colors"
+                  className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                   title="Sign out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -178,7 +171,7 @@ export function Header() {
             ) : (
               <Link
                 to="/auth"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Sign In</span>
@@ -189,7 +182,7 @@ export function Header() {
             {(!user || isCitizen) && (
               <Link
                 to="/report"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-swach-600 to-swach-500 text-white shadow-md shadow-swach-500/20 hover:from-swach-500 hover:to-swach-400 transition-all active:scale-95"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all active:scale-95"
               >
                 <ClipboardList className="w-3.5 h-3.5" />
                 <span>Report Waste</span>
@@ -201,7 +194,7 @@ export function Header() {
           <div className="flex lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 focus:outline-none"
+              className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -212,7 +205,7 @@ export function Header() {
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 pt-2 pb-4 space-y-2">
+        <div className="lg:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
           {navLinks.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -223,8 +216,8 @@ export function Header() {
                 className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
                   isActive
-                    ? 'bg-swach-500/10 text-swach-400 border border-swach-500/30'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                 )}
               >
                 {item.icon}
@@ -237,17 +230,17 @@ export function Header() {
             <Link
               to="/report"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold rounded-xl bg-swach-600 text-white shadow-md shadow-swach-500/20"
+              className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold rounded-xl bg-emerald-600 text-white shadow-xs"
             >
               <ClipboardList className="w-4 h-4" />
               <span>Report Waste</span>
             </Link>
           )}
 
-          <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
             {user ? (
               <div className="flex items-center justify-between w-full">
-                <span className="text-xs text-slate-300">
+                <span className="text-xs text-slate-700">
                   {displayName} ({roleLabel})
                 </span>
                 <button
@@ -255,7 +248,7 @@ export function Header() {
                     signOut();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-xs text-rose-400 font-medium hover:underline flex items-center gap-1"
+                  className="text-xs text-rose-600 font-medium hover:underline flex items-center gap-1"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Sign Out
@@ -265,7 +258,7 @@ export function Header() {
               <Link
                 to="/auth"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-800 text-white"
+                className="w-full text-center py-2 text-xs font-semibold rounded-xl bg-slate-100 border border-slate-200 text-slate-800"
               >
                 Sign In
               </Link>

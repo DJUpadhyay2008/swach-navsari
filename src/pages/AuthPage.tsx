@@ -205,63 +205,63 @@ export function AuthPage() {
       {/* Header section */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
         <Badge variant="default">Unified Authentication</Badge>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
           Welcome to a Cleaner Navsari
         </h1>
-        <p className="text-sm sm:text-base text-slate-300">
+        <p className="text-sm sm:text-base text-slate-600">
           Sign in to access the services available to your account.
         </p>
       </div>
 
-      {/* Role information cards (Informational only — does not grant or set roles) */}
+      {/* Role information cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4" aria-label="Portal access roles">
         {/* Citizen Card */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-3">
           <div className="space-y-2">
-            <div className="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+            <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600">
               <Users className="w-5 h-5" />
             </div>
-            <h2 className="text-sm font-bold text-white">Citizen</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <h2 className="text-sm font-bold text-slate-900">Citizen</h2>
+            <p className="text-xs text-slate-500 leading-relaxed">
               Report cleanliness issues, track complaints, and participate in community initiatives.
             </p>
           </div>
-          <span className="text-[11px] font-medium text-teal-400/90 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+          <span className="text-[11px] font-semibold text-teal-700 flex items-center gap-1.5 pt-1">
+            <span className="w-2 h-2 rounded-full bg-teal-500" />
             Public Registration Available
           </span>
         </div>
 
         {/* Municipal Official Card */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-3">
           <div className="space-y-2">
-            <div className="w-9 h-9 rounded-xl bg-swach-500/10 border border-swach-500/30 flex items-center justify-center text-swach-400">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <h2 className="text-sm font-bold text-white">Municipal Official</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Review complaints, assign workers, and verify resolutions.
+            <h2 className="text-sm font-bold text-slate-900">Municipal Official</h2>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Review complaints, assign workers, and verify resolutions across 13 wards.
             </p>
           </div>
-          <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+          <span className="text-[11px] font-semibold text-slate-600 flex items-center gap-1.5 pt-1">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
             Admin Provisioned Account
           </span>
         </div>
 
         {/* Sanitation Worker Card */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col justify-between space-y-3">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-3">
           <div className="space-y-2">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
               <HardHat className="w-5 h-5" />
             </div>
-            <h2 className="text-sm font-bold text-white">Sanitation Worker</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              View assigned tasks and submit completion evidence.
+            <h2 className="text-sm font-bold text-slate-900">Sanitation Worker</h2>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              View assigned tasks, navigate to site, and submit completion evidence.
             </p>
           </div>
-          <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+          <span className="text-[11px] font-semibold text-slate-600 flex items-center gap-1.5 pt-1">
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
             Supervisor Assigned Account
           </span>
         </div>
@@ -289,12 +289,12 @@ export function AuthPage() {
           </Alert>
         )}
 
-        <Card>
+        <Card className="bg-white border border-slate-200 shadow-sm p-6 sm:p-8 rounded-2xl">
           {/* Tab selector */}
           <div
             role="tablist"
             aria-label="Authentication modes"
-            className="grid grid-cols-2 p-1 bg-slate-900 rounded-xl border border-slate-800 mb-6"
+            className="grid grid-cols-2 p-1 bg-slate-100 rounded-xl border border-slate-200 mb-6"
           >
             <button
               type="button"
@@ -306,10 +306,10 @@ export function AuthPage() {
                 setMode('signin');
                 setErrorMessage(null);
               }}
-              className={`py-2 text-xs font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-swach-500 ${
+              className={`py-2.5 text-xs font-bold rounded-lg transition-colors focus:outline-none ${
                 mode === 'signin'
-                  ? 'bg-swach-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Sign In
@@ -324,10 +324,10 @@ export function AuthPage() {
                 setMode('signup');
                 setErrorMessage(null);
               }}
-              className={`py-2 text-xs font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-swach-500 ${
+              className={`py-2.5 text-xs font-bold rounded-lg transition-colors focus:outline-none ${
                 mode === 'signup'
-                  ? 'bg-swach-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Create Citizen Account
@@ -340,7 +340,7 @@ export function AuthPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor={emailInputId}
-                    className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="text-xs font-bold uppercase tracking-wider text-slate-700"
                   >
                     Email Address
                   </label>
@@ -352,11 +352,11 @@ export function AuthPage() {
                       autoComplete="email"
                       placeholder="name@example.com"
                       {...signInForm.register('email')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500 focus:ring-1 focus:ring-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                   {signInForm.formState.errors.email && (
-                    <p className="text-xs text-rose-400" role="alert">
+                    <p className="text-xs text-rose-500" role="alert">
                       {signInForm.formState.errors.email.message}
                     </p>
                   )}
@@ -365,7 +365,7 @@ export function AuthPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor={passwordInputId}
-                    className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="text-xs font-bold uppercase tracking-wider text-slate-700"
                   >
                     Password
                   </label>
@@ -377,11 +377,11 @@ export function AuthPage() {
                       autoComplete="current-password"
                       placeholder="••••••••"
                       {...signInForm.register('password')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500 focus:ring-1 focus:ring-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     />
                   </div>
                   {signInForm.formState.errors.password && (
-                    <p className="text-xs text-rose-400" role="alert">
+                    <p className="text-xs text-rose-500" role="alert">
                       {signInForm.formState.errors.password.message}
                     </p>
                   )}
@@ -390,7 +390,7 @@ export function AuthPage() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full mt-2"
+                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
                   isLoading={isSubmitting}
                   disabled={!isConfigured}
                 >
@@ -401,13 +401,13 @@ export function AuthPage() {
               {/* Explanatory section for Municipal Official & Staff Sign In */}
               <div
                 id="staff-signin-info"
-                className="p-3.5 bg-slate-900/90 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-1.5"
+                className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1.5"
               >
-                <div className="flex items-center gap-1.5 font-semibold text-slate-200">
-                  <Info className="w-3.5 h-3.5 text-swach-400" />
+                <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                  <Info className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Municipal Official & Staff Sign In</span>
                 </div>
-                <p className="leading-relaxed">
+                <p className="leading-relaxed text-slate-500">
                   Municipal officials and sanitation workers sign in using this same form. Staff
                   accounts are provisioned by Navsari municipal administration. Enter your
                   authorized credentials above to access your operational portal.
@@ -416,8 +416,8 @@ export function AuthPage() {
             </div>
           ) : (
             <div id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" className="space-y-4">
-              <div className="p-3 bg-teal-500/5 rounded-xl border border-teal-500/20 text-xs text-teal-300">
-                <span className="font-semibold text-teal-200">Public Citizen Registration: </span>
+              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800">
+                <span className="font-bold text-emerald-900">Public Citizen Registration: </span>
                 Create an account to report garbage, overflow, and hygiene issues in Navsari.
               </div>
 
@@ -425,7 +425,7 @@ export function AuthPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor={nameInputId}
-                    className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="text-xs font-bold uppercase tracking-wider text-slate-700"
                   >
                     Full Name
                   </label>
@@ -437,11 +437,11 @@ export function AuthPage() {
                       autoComplete="name"
                       placeholder="e.g. Ananya Patel"
                       {...signUpForm.register('fullName')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500"
                     />
                   </div>
                   {signUpForm.formState.errors.fullName && (
-                    <p className="text-xs text-rose-400" role="alert">
+                    <p className="text-xs text-rose-500" role="alert">
                       {signUpForm.formState.errors.fullName.message}
                     </p>
                   )}
@@ -450,7 +450,7 @@ export function AuthPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor={`${emailInputId}-signup`}
-                    className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="text-xs font-bold uppercase tracking-wider text-slate-700"
                   >
                     Email Address
                   </label>
@@ -462,11 +462,11 @@ export function AuthPage() {
                       autoComplete="email"
                       placeholder="name@example.com"
                       {...signUpForm.register('email')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500"
                     />
                   </div>
                   {signUpForm.formState.errors.email && (
-                    <p className="text-xs text-rose-400" role="alert">
+                    <p className="text-xs text-rose-500" role="alert">
                       {signUpForm.formState.errors.email.message}
                     </p>
                   )}
@@ -475,7 +475,7 @@ export function AuthPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor={`${passwordInputId}-signup`}
-                    className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                    className="text-xs font-bold uppercase tracking-wider text-slate-700"
                   >
                     Password
                   </label>
@@ -487,11 +487,11 @@ export function AuthPage() {
                       autoComplete="new-password"
                       placeholder="Minimum 6 characters"
                       {...signUpForm.register('password')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500"
                     />
                   </div>
                   {signUpForm.formState.errors.password && (
-                    <p className="text-xs text-rose-400" role="alert">
+                    <p className="text-xs text-rose-500" role="alert">
                       {signUpForm.formState.errors.password.message}
                     </p>
                   )}
@@ -501,14 +501,14 @@ export function AuthPage() {
                   <div className="space-y-1.5">
                     <label
                       htmlFor={wardInputId}
-                      className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                      className="text-xs font-bold uppercase tracking-wider text-slate-700"
                     >
                       Navsari Ward
                     </label>
                     <select
                       id={wardInputId}
                       {...signUpForm.register('wardNumber')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:bg-white focus:border-emerald-500"
                     >
                       {NAVSARI_WARDS.map((w) => (
                         <option key={w.number} value={w.number}>
@@ -521,7 +521,7 @@ export function AuthPage() {
                   <div className="space-y-1.5">
                     <label
                       htmlFor={phoneInputId}
-                      className="text-xs font-semibold uppercase tracking-wider text-slate-300"
+                      className="text-xs font-bold uppercase tracking-wider text-slate-700"
                     >
                       Phone (Optional)
                     </label>
@@ -531,7 +531,7 @@ export function AuthPage() {
                       autoComplete="tel"
                       placeholder="+919876543210"
                       {...signUpForm.register('phone')}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-swach-500"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500"
                     />
                   </div>
                 </div>
@@ -539,7 +539,7 @@ export function AuthPage() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full mt-2"
+                  className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
                   isLoading={isSubmitting}
                   disabled={!isConfigured}
                 >

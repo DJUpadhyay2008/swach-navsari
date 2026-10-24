@@ -20,7 +20,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 px-2 py-1 safe-area-bottom">
+    <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200 px-2 py-1 safe-area-bottom shadow-lg">
       <div className="flex items-center justify-around max-w-md mx-auto">
         {items.map((item) => {
           const isActive =
@@ -37,10 +37,10 @@ export function BottomNav() {
                 to={item.path}
                 className="flex flex-col items-center -mt-5 relative group"
               >
-                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-swach-600 to-swach-500 shadow-lg shadow-swach-500/30 flex items-center justify-center text-white border-2 border-slate-950 transition-transform active:scale-95 group-hover:scale-105">
+                <div className="w-12 h-12 rounded-full bg-emerald-600 shadow-md shadow-emerald-500/30 flex items-center justify-center text-white border-2 border-white transition-transform active:scale-95 group-hover:scale-105">
                   <Icon className="w-6 h-6" />
                 </div>
-                <span className="text-[10px] font-semibold text-swach-400 mt-1">
+                <span className="text-[10px] font-bold text-emerald-700 mt-1">
                   {item.label}
                 </span>
               </Link>
@@ -53,12 +53,12 @@ export function BottomNav() {
               to={item.path}
               className={`flex flex-col items-center py-1 px-2.5 rounded-lg transition-colors ${
                 isActive
-                  ? 'text-swach-400 font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-emerald-600 font-bold'
+                  : 'text-slate-400 hover:text-slate-700'
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-[10px] tracking-tight mt-0.5">{item.label}</span>
+              <span className="text-[10px] font-medium mt-0.5">{item.label}</span>
             </Link>
           );
         })}
