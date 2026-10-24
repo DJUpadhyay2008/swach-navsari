@@ -65,6 +65,8 @@ export function WorkerPortalPage() {
     queryKey: ['worker-tasks', user?.id],
     queryFn: () => (user?.id ? getWorkerTasks(user.id) : Promise.resolve([])),
     enabled: Boolean(user?.id),
+    refetchInterval: 3000,
+    refetchOnWindowFocus: true,
   });
 
   // Decide which base tasks to display:
@@ -79,9 +81,13 @@ export function WorkerPortalPage() {
 
   const isUsingDemo = !fetchedTasks || fetchedTasks.length === 0;
 
-  // Merge with any local optimistic status transitions
+  // Merge with any local optimistic status transitions for demo tasks only,
+  // ensuring real tasks always reflect live database lifecycle status (assigned, in_progress, resolution_submitted, resolved)
   const tasks = useMemo(() => {
     return baseTasks.map((task) => {
+      if (!task.isDemo) {
+        return task;
+      }
       const override = localTaskOverrides[task.assignmentId];
       if (override) {
         return { ...task, ...override };
@@ -130,16 +136,24 @@ export function WorkerPortalPage() {
   const submitResolutionMutation = useMutation({
     mutationFn: submitResolutionEvidence,
     onSuccess: (result, variables) => {
-      setLocalTaskOverrides((prev) => ({
-        ...prev,
-        [variables.assignmentId]: {
-          reportStatus: 'resolution_submitted',
-          assignmentStatus: 'in_progress',
-          completedAt: new Date().toISOString(),
-          resolutionPhotoUrl: result.previewUrl,
-          resolutionNotes: variables.notes,
-        },
-      }));
+      if (variables.isDemo) {
+        setLocalTaskOverrides((prev) => ({
+          ...prev,
+          [variables.assignmentId]: {
+            reportStatus: 'resolution_submitted',
+            assignmentStatus: 'in_progress',
+            completedAt: new Date().toISOString(),
+            resolutionPhotoUrl: result.previewUrl,
+            resolutionNotes: variables.notes,
+          },
+        }));
+      } else {
+        setLocalTaskOverrides((prev) => {
+          const copy = { ...prev };
+          delete copy[variables.assignmentId];
+          return copy;
+        });
+      }
 
       // Automatically switch to the "Under Review" tab so the worker sees the submitted task immediately
       setFilterTab('review');
@@ -681,7 +695,7 @@ export function WorkerPortalPage() {
 
                   {/* State 4: RESOLVED (Final Verified State) */}
                   {task.reportStatus === 'resolved' && (
-                    <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/40 space-y-2">
+                    <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/40 space-y-3">
                       <div className="flex items-center gap-2 text-emerald-300 text-xs font-semibold">
                         <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                         <span>Verified & Closed by Municipal Supervisor</span>
@@ -693,6 +707,12 @@ export function WorkerPortalPage() {
                             alt="Verified resolution"
                             className="max-h-48 w-auto object-contain"
                           />
+                        </div>
+                      )}
+                      {task.resolutionNotes && (
+                        <div className="text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+                          <span className="font-medium text-slate-400 block mb-0.5">Verified Completion Notes:</span>
+                          <p>{task.resolutionNotes}</p>
                         </div>
                       )}
                     </div>
