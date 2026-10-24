@@ -28,6 +28,11 @@ describe('Sanitation Worker Service', () => {
   describe('getWorkerTasks', () => {
     it('returns empty array when worker has no assignments in database', async () => {
       mockFrom.mockReturnValue({
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ error: null }),
+          }),
+        }),
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
             order: vi.fn().mockResolvedValue({
@@ -85,6 +90,11 @@ describe('Sanitation Worker Service', () => {
       mockFrom.mockImplementation((tableName: string) => {
         if (tableName === 'assignments') {
           return {
+            update: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockResolvedValue({ error: null }),
+              }),
+            }),
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
                 order: vi.fn().mockResolvedValue({

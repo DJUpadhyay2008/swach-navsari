@@ -40,7 +40,21 @@ export async function getWorkerTasks(workerId: string): Promise<WorkerTask[]> {
     return DEMO_WORKER_TASKS;
   }
 
-  // 1. Fetch assignments for this worker
+  // 1. Restore any assignments marked 'completed' back to 'in_progress'
+  // PostgreSQL RLS policy `is_assigned_worker(reports.id, auth.uid())` requires status to be in
+  // ('assigned', 'accepted', 'in_progress'). Preserving 'in_progress' while awaiting supervisor
+  // verification ensures workers retain permission to view their submitted reports.
+  try {
+    await supabase
+      .from('assignments')
+      .update({ status: 'in_progress' })
+      .eq('worker_id', workerId)
+      .eq('status', 'completed');
+  } catch (err) {
+    console.warn('Assignment status sync notice:', err);
+  }
+
+  // 2. Fetch assignments for this worker
   const { data: assignments, error: assignmentsError } = await supabase
     .from('assignments')
     .select(`
@@ -258,11 +272,11 @@ export async function submitResolutionEvidence(
       throw new Error(`Failed to submit complaint for verification: ${rpcError.message}`);
     }
 
-    // 4. Update assignment status to completed
+    // 4. Update assignment with completion timestamp (keep status in_progress so RLS is_assigned_worker remains valid while under review)
     const { error: assnError } = await supabase
       .from('assignments')
       .update({
-        status: 'completed',
+        status: 'in_progress',
         completed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })

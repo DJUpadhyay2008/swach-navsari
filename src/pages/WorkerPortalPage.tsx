@@ -134,12 +134,15 @@ export function WorkerPortalPage() {
         ...prev,
         [variables.assignmentId]: {
           reportStatus: 'resolution_submitted',
-          assignmentStatus: 'completed',
+          assignmentStatus: 'in_progress',
           completedAt: new Date().toISOString(),
           resolutionPhotoUrl: result.previewUrl,
           resolutionNotes: variables.notes,
         },
       }));
+
+      // Automatically switch to the "Under Review" tab so the worker sees the submitted task immediately
+      setFilterTab('review');
 
       setSubmissionFeedback((prev) => ({
         ...prev,
