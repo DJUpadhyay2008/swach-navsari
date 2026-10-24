@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
@@ -24,19 +24,59 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const backendConfigured = isSupabaseConfigured();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, roles, isLoading, signOut } = useAuth();
 
-  const navLinks = [
-    { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
-    { label: 'Report Issue', path: '/report', icon: <ClipboardList className="w-4 h-4" /> },
-    { label: 'My Reports', path: '/my-reports', icon: <FileText className="w-4 h-4" /> },
-    { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
-    { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
-    { label: 'Municipal Portal', path: '/admin', icon: <ShieldCheck className="w-4 h-4" /> },
-    { label: 'Worker Portal', path: '/worker', icon: <HardHat className="w-4 h-4" /> },
-  ];
+  const isOfficial = !isLoading && !!user && roles.includes('municipal_official');
+  const isWorker = !isLoading && !!user && roles.includes('sanitation_worker');
+  const isCitizen = !isLoading && !!user && !isOfficial && !isWorker;
 
-  const displayName = profile?.full_name || user?.email?.split('@')[0] || 'Citizen';
+  // Build role-appropriate navigation items
+  const navLinks = useMemo(() => {
+    if (isLoading) {
+      return [
+        { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+      ];
+    }
+
+    if (!user) {
+      return [
+        { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+        { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+      ];
+    }
+
+    if (isOfficial) {
+      return [
+        { label: 'Municipal Portal', path: '/admin', icon: <ShieldCheck className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+        { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+      ];
+    }
+
+    if (isWorker) {
+      return [
+        { label: 'Worker Portal', path: '/worker', icon: <HardHat className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+      ];
+    }
+
+    // Default: Citizen
+    return [
+      { label: 'My Reports', path: '/my-reports', icon: <FileText className="w-4 h-4" /> },
+      { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+      { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+    ];
+  }, [isLoading, user, isOfficial, isWorker]);
+
+  const roleLabel = isOfficial
+    ? 'Official'
+    : isWorker
+    ? 'Worker'
+    : 'Citizen';
+
+  const displayName = profile?.full_name || user?.email?.split('@')[0] || roleLabel;
 
   return (
     <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800/80">
@@ -117,9 +157,12 @@ export function Header() {
             {/* Auth Session Status */}
             {user ? (
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200">
                   <User className="w-3 h-3 text-swach-400" />
                   <span className="max-w-[100px] truncate">{displayName}</span>
+                  <span className="text-[10px] font-semibold px-1 py-0.2 rounded bg-slate-800 text-slate-400 uppercase">
+                    {roleLabel}
+                  </span>
                 </span>
                 <button
                   onClick={() => signOut()}
@@ -135,17 +178,20 @@ export function Header() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors"
               >
                 <LogIn className="w-3.5 h-3.5" />
-                <span>Citizen Sign In</span>
+                <span>Sign In</span>
               </Link>
             )}
 
-            <Link
-              to="/report"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-swach-600 to-swach-500 text-white shadow-md shadow-swach-500/20 hover:from-swach-500 hover:to-swach-400 transition-all active:scale-95"
-            >
-              <ClipboardList className="w-3.5 h-3.5" />
-              <span>Report Waste</span>
-            </Link>
+            {/* Report Waste button for citizen & signed-out users */}
+            {(!user || isCitizen) && (
+              <Link
+                to="/report"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-swach-600 to-swach-500 text-white shadow-md shadow-swach-500/20 hover:from-swach-500 hover:to-swach-400 transition-all active:scale-95"
+              >
+                <ClipboardList className="w-3.5 h-3.5" />
+                <span>Report Waste</span>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -184,10 +230,23 @@ export function Header() {
             );
           })}
 
+          {(!user || isCitizen) && (
+            <Link
+              to="/report"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-semibold rounded-xl bg-swach-600 text-white shadow-md shadow-swach-500/20"
+            >
+              <ClipboardList className="w-4 h-4" />
+              <span>Report Waste</span>
+            </Link>
+          )}
+
           <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
             {user ? (
               <div className="flex items-center justify-between w-full">
-                <span className="text-xs text-slate-300">Signed in as {displayName}</span>
+                <span className="text-xs text-slate-300">
+                  {displayName} ({roleLabel})
+                </span>
                 <button
                   onClick={() => {
                     signOut();
@@ -205,7 +264,7 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full text-center py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-800 text-white"
               >
-                Citizen Sign In / Register
+                Sign In
               </Link>
             )}
           </div>

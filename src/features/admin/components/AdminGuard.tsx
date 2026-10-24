@@ -1,11 +1,11 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
-import { ShieldAlert, LogIn, HardHat, Home, RefreshCw } from 'lucide-react';
+import { ShieldAlert, LogIn, HardHat, FileText, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface AdminGuardProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export function AdminGuard({ children }: AdminGuardProps) {
@@ -80,9 +80,9 @@ export function AdminGuard({ children }: AdminGuardProps) {
                 </Button>
               </Link>
             )}
-            <Link to="/" className="w-full">
-              <Button variant="outline" className="w-full" leftIcon={<Home className="w-4 h-4" />}>
-                Return to Citizen Portal
+            <Link to="/my-reports" className="w-full">
+              <Button variant={isWorker ? "outline" : "primary"} className="w-full" leftIcon={<FileText className="w-4 h-4" />}>
+                Go to My Reports
               </Button>
             </Link>
             <Button

@@ -9,6 +9,7 @@ import { AuthPage } from '@/pages/AuthPage';
 import { WorkerPortalPage } from '@/pages/WorkerPortalPage';
 import { CommunityPage } from '@/pages/CommunityPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { WorkerGuard } from '@/features/auth';
 
 // Municipal Admin Operations
 import { AdminGuard } from '@/features/admin/components/AdminGuard';
@@ -55,7 +56,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'worker',
-        element: <WorkerPortalPage />,
+        element: (
+          <WorkerGuard>
+            <WorkerPortalPage />
+          </WorkerGuard>
+        ),
       },
       {
         path: 'community',

@@ -1,5 +1,7 @@
 export * from './AuthContext';
 export * from './useAuth';
+export * from './redirects';
+export * from './WorkerGuard';
 export * from '@/lib/validation/reports';
 import type { AppRole } from '@/types';
 

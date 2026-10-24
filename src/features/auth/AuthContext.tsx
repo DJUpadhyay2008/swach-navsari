@@ -16,9 +16,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const configured = isSupabaseConfigured();
 
   // Fetch protected roles and profile for the authenticated user
-  const fetchUserData = useCallback(async (currentUser: User) => {
+  const fetchUserData = useCallback(async (currentUser: User): Promise<AppRole[]> => {
     const supabase = getSupabase();
-    if (!supabase) return;
+    if (!supabase) return ['citizen'];
 
     try {
       // 1. Fetch user roles from protected user_roles table
@@ -27,11 +27,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .select('role')
         .eq('user_id', currentUser.id);
 
-      if (roleRecords && roleRecords.length > 0) {
-        setRoles(roleRecords.map((r) => r.role));
-      } else {
-        setRoles(['citizen']); // Default fallback
-      }
+      const resolvedRoles: AppRole[] =
+        roleRecords && roleRecords.length > 0
+          ? roleRecords.map((r) => r.role as AppRole)
+          : (['citizen'] as AppRole[]);
+
+      setRoles(resolvedRoles);
 
       // 2. Fetch public profile
       const { data: profileRecord } = await supabase
@@ -43,9 +44,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (profileRecord) {
         setProfile(profileRecord);
       }
+
+      return resolvedRoles;
     } catch (err) {
       console.warn('Failed to fetch user roles/profile:', err);
       setRoles(['citizen']);
+      return ['citizen'];
     }
   }, []);
 
@@ -95,19 +99,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [configured, fetchUserData]);
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    const supabase = getSupabase();
-    if (!supabase) {
-      return { error: new Error('Supabase is not configured.') };
-    }
+  const signIn = useCallback(
+    async (
+      email: string,
+      password: string
+    ): Promise<{ error: Error | null; roles?: AppRole[] }> => {
+      const supabase = getSupabase();
+      if (!supabase) {
+        return { error: new Error('Supabase is not configured.') };
+      }
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    return { error: error ? new Error(error.message) : null };
-  }, []);
+      if (error) {
+        return { error: new Error(error.message) };
+      }
+
+      if (data.user) {
+        const resolvedRoles = await fetchUserData(data.user);
+        return { error: null, roles: resolvedRoles };
+      }
+
+      return { error: null, roles: ['citizen'] };
+    },
+    [fetchUserData]
+  );
 
   const signUp = useCallback(
     async (

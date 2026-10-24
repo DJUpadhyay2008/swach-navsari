@@ -11,7 +11,10 @@ export interface AuthContextType {
   profile: ProfileRow | null;
   isLoading: boolean;
   isConfigured: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signIn: (
+    email: string,
+    password: string
+  ) => Promise<{ error: Error | null; roles?: AppRole[] }>;
   signUp: (
     email: string,
     password: string,
