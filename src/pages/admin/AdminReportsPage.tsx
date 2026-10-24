@@ -89,10 +89,10 @@ export function AdminReportsPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#172B3A] tracking-tight">
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
             Complaint Operations Queue
           </h1>
-          <p className="text-xs text-[#64748B] mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Triage, assignment, and status management for Navsari municipal cleanliness reports.
           </p>
         </div>
@@ -108,14 +108,14 @@ export function AdminReportsPage() {
               Reset Filters
             </Button>
           )}
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-teal-50 text-[#087F7B] border border-teal-200">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-swach-500/10 text-swach-400 border border-swach-500/20">
             {totalCount} Total Reports
           </span>
         </div>
       </div>
 
       {/* Filters Toolbar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+      <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800 shadow-sm space-y-3">
         {/* Search Bar */}
         <form onSubmit={handleSearchSubmit} className="flex gap-2">
           <div className="relative flex-1">
@@ -125,10 +125,10 @@ export function AdminReportsPage() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search by Complaint Reference (e.g. NAV-2026-00101) or Locality / Street..."
-              className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-[#172B3A] focus:outline-none focus:ring-2 focus:ring-[#087F7B] focus:border-[#087F7B]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-xl text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-swach-500 focus:border-swach-500"
             />
           </div>
-          <Button type="submit" size="sm" className="bg-[#087F7B] hover:bg-[#066461] text-white">
+          <Button type="submit" size="sm" className="bg-swach-600 hover:bg-swach-500 text-white">
             Search
           </Button>
         </form>
@@ -137,11 +137,11 @@ export function AdminReportsPage() {
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
           {/* Status */}
           <div>
-            <label className="block text-[10px] font-bold uppercase text-[#64748B] mb-1">Status</label>
+            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Status</label>
             <select
               value={statusParam}
               onChange={(e) => updateParam('status', e.target.value)}
-              className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[#172B3A] focus:outline-none focus:ring-1 focus:ring-[#087F7B]"
+              className="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-swach-500"
             >
               <option value="all">All Statuses</option>
               <option value="submitted">Submitted (New)</option>
@@ -158,11 +158,11 @@ export function AdminReportsPage() {
 
           {/* Priority */}
           <div>
-            <label className="block text-[10px] font-bold uppercase text-[#64748B] mb-1">Priority</label>
+            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Priority</label>
             <select
               value={priorityParam}
               onChange={(e) => updateParam('priority', e.target.value)}
-              className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[#172B3A] focus:outline-none focus:ring-1 focus:ring-[#087F7B]"
+              className="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-swach-500"
             >
               <option value="all">All Priorities</option>
               {COMPLAINT_PRIORITIES.map((p) => (
@@ -175,11 +175,11 @@ export function AdminReportsPage() {
 
           {/* Category */}
           <div>
-            <label className="block text-[10px] font-bold uppercase text-[#64748B] mb-1">Category</label>
+            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Category</label>
             <select
               value={categoryParam}
               onChange={(e) => updateParam('category', e.target.value)}
-              className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[#172B3A] focus:outline-none focus:ring-1 focus:ring-[#087F7B]"
+              className="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-swach-500"
             >
               <option value="all">All Categories</option>
               {COMPLAINT_CATEGORIES.map((c) => (
@@ -192,11 +192,11 @@ export function AdminReportsPage() {
 
           {/* Ward (1-13) */}
           <div>
-            <label className="block text-[10px] font-bold uppercase text-[#64748B] mb-1">Civic Ward</label>
+            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Civic Ward</label>
             <select
               value={wardParam.toString()}
               onChange={(e) => updateParam('ward', e.target.value)}
-              className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[#172B3A] focus:outline-none focus:ring-1 focus:ring-[#087F7B]"
+              className="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-swach-500"
             >
               <option value="all">All 13 Wards</option>
               {NAVSARI_WARDS.map((w) => (
@@ -209,11 +209,11 @@ export function AdminReportsPage() {
 
           {/* Sort By */}
           <div>
-            <label className="block text-[10px] font-bold uppercase text-[#64748B] mb-1">Sort Order</label>
+            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Sort Order</label>
             <select
               value={sortBy}
               onChange={(e) => updateParam('sortBy', e.target.value)}
-              className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-[#172B3A] focus:outline-none focus:ring-1 focus:ring-[#087F7B]"
+              className="w-full text-xs bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-swach-500"
             >
               <option value="submitted_at_desc">Newest First</option>
               <option value="submitted_at_asc">Oldest First</option>
@@ -225,29 +225,29 @@ export function AdminReportsPage() {
       </div>
 
       {/* Main Table Container */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-slate-900/70 rounded-2xl border border-slate-800 shadow-sm overflow-hidden">
         {isLoading ? (
           <div className="p-8 space-y-4 animate-pulse">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-12 bg-slate-100 rounded-xl" />
+              <div key={i} className="h-12 bg-slate-800/60 rounded-xl" />
             ))}
           </div>
         ) : error ? (
           <div className="p-8 text-center space-y-3">
             <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
-            <p className="text-sm font-bold text-[#172B3A]">Failed to Load Complaint Records</p>
-            <p className="text-xs text-[#64748B]">{(error as Error).message}</p>
+            <p className="text-sm font-bold text-white">Failed to Load Complaint Records</p>
+            <p className="text-xs text-slate-400">{(error as Error).message}</p>
             <Button size="sm" onClick={() => refetch()}>
               Try Again
             </Button>
           </div>
         ) : reports.length === 0 ? (
           <div className="p-12 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-200 text-[#087F7B] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-swach-500/10 border border-swach-500/20 text-swach-400 flex items-center justify-center mx-auto">
               <Inbox className="w-6 h-6" />
             </div>
-            <p className="text-sm font-bold text-[#172B3A]">No Complaints Match Your Criteria</p>
-            <p className="text-xs text-[#64748B]">
+            <p className="text-sm font-bold text-white">No Complaints Match Your Criteria</p>
+            <p className="text-xs text-slate-400">
               Try adjusting your filter options or search query to find matching municipal reports.
             </p>
             {hasActiveFilters && (
@@ -258,8 +258,8 @@ export function AdminReportsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-[#172B3A]">
-              <thead className="bg-slate-50 text-[#64748B] uppercase tracking-wider text-[11px] border-b border-slate-200 font-semibold">
+            <table className="w-full text-left text-xs text-slate-200">
+              <thead className="bg-slate-950/80 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800 font-semibold">
                 <tr>
                   <th className="py-3 px-4">Complaint ID</th>
                   <th className="py-3 px-4">Category</th>
@@ -271,15 +271,15 @@ export function AdminReportsPage() {
                   <th className="py-3 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-800/80">
                 {reports.map((rep) => {
                   const cat = CATEGORY_LABELS[rep.category];
                   const isResolved = rep.status === 'resolved' || rep.status === 'rejected' || rep.status === 'cancelled';
 
                   return (
-                    <tr key={rep.id} className="hover:bg-slate-50/70 transition-colors">
+                    <tr key={rep.id} className="hover:bg-slate-800/40 transition-colors">
                       {/* Reference */}
-                      <td className="py-3.5 px-4 font-mono font-bold text-[#087F7B]">
+                      <td className="py-3.5 px-4 font-mono font-bold text-swach-400">
                         <Link to={`/admin/reports/${rep.id}`} className="hover:underline">
                           {rep.complaint_id}
                         </Link>
@@ -287,16 +287,16 @@ export function AdminReportsPage() {
 
                       {/* Category */}
                       <td className="py-3.5 px-4">
-                        <div className="font-semibold text-[#172B3A]">{cat?.label || rep.category}</div>
-                        <div className="text-[10px] text-[#64748B]">{cat?.gujarati}</div>
+                        <div className="font-semibold text-white">{cat?.label || rep.category}</div>
+                        <div className="text-[10px] text-slate-400">{cat?.gujarati}</div>
                       </td>
 
                       {/* Ward & Locality */}
                       <td className="py-3.5 px-4">
-                        <div className="font-medium text-[#172B3A]">
+                        <div className="font-medium text-slate-200">
                           {rep.ward_number ? `Ward ${rep.ward_number}` : 'Navsari'}
                         </div>
-                        <div className="text-[11px] text-[#64748B] truncate max-w-[180px]">
+                        <div className="text-[11px] text-slate-400 truncate max-w-[180px]">
                           {rep.address_locality || 'Civic location'}
                           {rep.landmark ? ` • ${rep.landmark}` : ''}
                         </div>
@@ -315,17 +315,17 @@ export function AdminReportsPage() {
                       {/* Assigned Worker */}
                       <td className="py-3.5 px-4">
                         {rep.activeAssignment ? (
-                          <div className="flex items-center gap-1.5 text-xs text-[#172B3A]">
-                            <UserCheck className="w-3.5 h-3.5 text-cyan-600" />
+                          <div className="flex items-center gap-1.5 text-xs text-slate-200">
+                            <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
                             <span className="font-medium">{rep.activeAssignment.workerName}</span>
                           </div>
                         ) : (
-                          <span className="text-[11px] text-slate-400 italic">Unassigned</span>
+                          <span className="text-[11px] text-slate-500 italic">Unassigned</span>
                         )}
                       </td>
 
                       {/* Submitted */}
-                      <td className="py-3.5 px-4 text-[11px] text-[#64748B]">
+                      <td className="py-3.5 px-4 text-[11px] text-slate-400">
                         {formatDate(rep.submitted_at)}
                       </td>
 
@@ -347,11 +347,11 @@ export function AdminReportsPage() {
 
         {/* Pagination Bar */}
         {totalPages > 1 && (
-          <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-[#64748B]">
+          <div className="p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
             <div>
-              Showing <span className="font-bold text-[#172B3A]">{(page - 1) * pageSize + 1}</span> to{' '}
-              <span className="font-bold text-[#172B3A]">{Math.min(page * pageSize, totalCount)}</span> of{' '}
-              <span className="font-bold text-[#172B3A]">{totalCount}</span> complaints
+              Showing <span className="font-bold text-white">{(page - 1) * pageSize + 1}</span> to{' '}
+              <span className="font-bold text-white">{Math.min(page * pageSize, totalCount)}</span> of{' '}
+              <span className="font-bold text-white">{totalCount}</span> complaints
             </div>
 
             <div className="flex items-center gap-2">

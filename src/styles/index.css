@@ -48,3 +48,92 @@
     box-shadow: 0 0 12px -2px currentColor;
   }
 }
+
+/* Municipal Portal Dark Theme Harmonization */
+.admin-scope .bg-white {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+  border-color: rgba(51, 65, 85, 0.6) !important;
+  color: #f1f5f9 !important;
+}
+
+.admin-scope .bg-slate-50 {
+  background-color: rgba(2, 6, 23, 0.7) !important;
+  border-color: rgba(51, 65, 85, 0.6) !important;
+  color: #e2e8f0 !important;
+}
+
+.admin-scope .border-slate-200,
+.admin-scope .border-slate-100 {
+  border-color: rgba(51, 65, 85, 0.6) !important;
+}
+
+.admin-scope .text-\[\#172B3A\] {
+  color: #ffffff !important;
+}
+
+.admin-scope .text-\[\#64748B\] {
+  color: #94a3b8 !important;
+}
+
+.admin-scope .text-\[\#087F7B\] {
+  color: #2dd4bf !important;
+}
+
+.admin-scope .bg-teal-50 {
+  background-color: rgba(20, 184, 166, 0.12) !important;
+  border-color: rgba(20, 184, 166, 0.3) !important;
+  color: #2dd4bf !important;
+}
+
+.admin-scope .bg-cyan-50 {
+  background-color: rgba(6, 182, 212, 0.12) !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.admin-scope .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  color: #fcd34d !important;
+}
+
+.admin-scope .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #6ee7b7 !important;
+}
+
+.admin-scope .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  color: #93c5fd !important;
+}
+
+.admin-scope .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.12) !important;
+  border-color: rgba(244, 63, 94, 0.3) !important;
+  color: #fda4af !important;
+}
+
+.admin-scope select,
+.admin-scope input,
+.admin-scope textarea {
+  background-color: #020617 !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.admin-scope select option {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.admin-scope thead {
+  background-color: rgba(2, 6, 23, 0.9) !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+.admin-scope tr:hover {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}

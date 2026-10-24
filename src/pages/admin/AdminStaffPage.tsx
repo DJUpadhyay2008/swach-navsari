@@ -14,10 +14,10 @@ export function AdminStaffPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#172B3A] tracking-tight">
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
             Municipal Operations Staff Directory
           </h1>
-          <p className="text-xs text-[#64748B] mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Registered municipal officers and authorized sanitation crew leads across Navsari.
           </p>
         </div>
@@ -32,7 +32,7 @@ export function AdminStaffPage() {
           >
             Refresh Roster
           </Button>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-teal-50 text-[#087F7B] border border-teal-200">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-swach-500/10 text-swach-400 border border-swach-500/20">
             {staff.length} Authorized Staff
           </span>
         </div>
@@ -41,20 +41,20 @@ export function AdminStaffPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-pulse">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-white rounded-2xl border border-slate-200" />
+            <div key={i} className="h-32 bg-slate-900/60 rounded-2xl border border-slate-800" />
           ))}
         </div>
       ) : error ? (
-        <div className="p-8 bg-white rounded-2xl border border-slate-200 text-center space-y-3">
+        <div className="p-8 bg-slate-900/80 rounded-2xl border border-slate-800 text-center space-y-3">
           <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
-          <p className="text-sm font-bold text-[#172B3A]">Failed to Load Staff Directory</p>
-          <p className="text-xs text-[#64748B]">{(error as Error).message}</p>
+          <p className="text-sm font-bold text-white">Failed to Load Staff Directory</p>
+          <p className="text-xs text-slate-400">{(error as Error).message}</p>
           <Button size="sm" onClick={() => refetch()}>
             Retry
           </Button>
         </div>
       ) : staff.length === 0 ? (
-        <div className="p-12 bg-white rounded-2xl border border-slate-200 text-center text-xs text-[#64748B]">
+        <div className="p-12 bg-slate-900/80 rounded-2xl border border-slate-800 text-center text-xs text-slate-400">
           No staff records currently found in <code>public.user_roles</code>.
         </div>
       ) : (
@@ -65,26 +65,26 @@ export function AdminStaffPage() {
             return (
               <div
                 key={s.id}
-                className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3 hover:border-teal-200 transition-colors"
+                className="bg-slate-900/70 rounded-2xl border border-slate-800 p-5 shadow-sm space-y-3 hover:border-swach-500/40 transition-colors"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
                         isOfficial
-                          ? 'bg-teal-50 text-[#087F7B] border border-teal-200'
-                          : 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+                          ? 'bg-swach-500/10 text-swach-400 border border-swach-500/20'
+                          : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                       }`}
                     >
                       {isOfficial ? <ShieldCheck className="w-5 h-5" /> : <HardHat className="w-5 h-5" />}
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-[#172B3A]">{s.fullName}</h3>
+                      <h3 className="text-sm font-bold text-white">{s.fullName}</h3>
                       <span
                         className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold mt-0.5 border ${
                           isOfficial
-                            ? 'bg-teal-50 text-[#087F7B] border-teal-200'
-                            : 'bg-cyan-50 text-cyan-800 border-cyan-200'
+                            ? 'bg-swach-500/10 text-swach-400 border-swach-500/20'
+                            : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
                         }`}
                       >
                         {isOfficial ? 'Municipal Official' : 'Sanitation Worker Lead'}
@@ -93,23 +93,23 @@ export function AdminStaffPage() {
                   </div>
                 </div>
 
-                <div className="space-y-1.5 text-xs text-[#64748B] pt-1">
+                <div className="space-y-1.5 text-xs text-slate-400 pt-1">
                   {s.phone && (
                     <div className="flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" />
+                      <Phone className="w-3.5 h-3.5 text-slate-500" />
                       <span>{s.phone}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-500" />
                     <span>{s.wardNumber ? `Ward ${s.wardNumber}` : 'Navsari Headquarters'}</span>
                   </div>
                 </div>
 
                 {!isOfficial && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-[#64748B]">Active Task Load:</span>
-                    <span className="font-bold text-[#172B3A]">{s.activeWorkload} complaints</span>
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
+                    <span className="text-slate-400">Active Task Load:</span>
+                    <span className="font-bold text-white">{s.activeWorkload} complaints</span>
                   </div>
                 )}
               </div>

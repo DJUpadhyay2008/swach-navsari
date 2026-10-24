@@ -80,10 +80,11 @@ describe('Default Role Portal Resolution (getDefaultRolePath)', () => {
 });
 
 describe('Role-Aware Post-Login Redirects (getSafePostLoginRedirect)', () => {
-  it('routes municipal_official to /admin by default or requested safe admin route', () => {
+  it('routes municipal_official to /admin by default and prevents routing into citizen pages', () => {
     expect(getSafePostLoginRedirect(['municipal_official'], null)).toBe('/admin');
     expect(getSafePostLoginRedirect(['municipal_official'], '/admin/reports')).toBe('/admin/reports');
-    expect(getSafePostLoginRedirect(['municipal_official'], '/my-reports')).toBe('/my-reports');
+    expect(getSafePostLoginRedirect(['municipal_official'], '/my-reports')).toBe('/admin');
+    expect(getSafePostLoginRedirect(['municipal_official'], '/report')).toBe('/admin');
   });
 
   it('routes sanitation_worker to /worker by default or requested worker route', () => {

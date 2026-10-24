@@ -26,48 +26,48 @@ export function StatusBadge({ status, className, showIcon = true }: StatusBadgeP
   > = {
     submitted: {
       label: 'Submitted',
-      icon: <Clock className="w-3 h-3 text-amber-600" />,
-      colorClass: 'bg-amber-50 text-amber-800 border-amber-200',
+      icon: <Clock className="w-3 h-3 text-amber-400" />,
+      colorClass: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
     },
     under_review: {
       label: 'Under Review',
-      icon: <Eye className="w-3 h-3 text-indigo-600" />,
-      colorClass: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+      icon: <Eye className="w-3 h-3 text-indigo-400" />,
+      colorClass: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30',
     },
     assigned: {
       label: 'Worker Assigned',
-      icon: <UserCheck className="w-3 h-3 text-cyan-600" />,
-      colorClass: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+      icon: <UserCheck className="w-3 h-3 text-cyan-400" />,
+      colorClass: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30',
     },
     in_progress: {
       label: 'In Progress',
-      icon: <PlayCircle className="w-3 h-3 text-blue-600" />,
-      colorClass: 'bg-blue-50 text-blue-800 border-blue-200',
+      icon: <PlayCircle className="w-3 h-3 text-blue-400" />,
+      colorClass: 'bg-blue-500/10 text-blue-300 border-blue-500/30',
     },
     resolution_submitted: {
       label: 'Awaiting Verification',
-      icon: <FileCheck2 className="w-3 h-3 text-teal-600" />,
-      colorClass: 'bg-teal-50 text-teal-800 border-teal-200',
+      icon: <FileCheck2 className="w-3 h-3 text-teal-400" />,
+      colorClass: 'bg-teal-500/10 text-teal-300 border-teal-500/30',
     },
     resolved: {
       label: 'Resolved',
-      icon: <CheckCircle2 className="w-3 h-3 text-emerald-600" />,
-      colorClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      icon: <CheckCircle2 className="w-3 h-3 text-emerald-400" />,
+      colorClass: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
     },
     rejected: {
       label: 'Rejected',
-      icon: <XCircle className="w-3 h-3 text-rose-600" />,
-      colorClass: 'bg-rose-50 text-rose-800 border-rose-200',
+      icon: <XCircle className="w-3 h-3 text-rose-400" />,
+      colorClass: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
     },
     reopened: {
       label: 'Reopened',
-      icon: <RotateCcw className="w-3 h-3 text-orange-600" />,
-      colorClass: 'bg-orange-50 text-orange-800 border-orange-200',
+      icon: <RotateCcw className="w-3 h-3 text-orange-400" />,
+      colorClass: 'bg-orange-500/10 text-orange-300 border-orange-500/30',
     },
     cancelled: {
       label: 'Cancelled',
-      icon: <Ban className="w-3 h-3 text-slate-500" />,
-      colorClass: 'bg-slate-100 text-slate-700 border-slate-200',
+      icon: <Ban className="w-3 h-3 text-slate-400" />,
+      colorClass: 'bg-slate-800 text-slate-300 border-slate-700',
     },
   };
 

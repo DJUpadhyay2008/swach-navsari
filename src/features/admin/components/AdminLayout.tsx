@@ -9,7 +9,7 @@ export function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F7FAFC] text-[#172B3A] flex flex-col font-sans">
+    <div className="admin-scope min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       <ConfigBanner />
       <div className="flex-1 flex w-full">
         <AdminSidebar

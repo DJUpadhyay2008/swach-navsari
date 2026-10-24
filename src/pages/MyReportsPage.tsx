@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { getCitizenReports } from '@/features/reports/reportsService';
 import { STATUS_CONFIG, PRIORITY_CONFIG, CATEGORY_LABELS, formatDate } from '@/lib/utils';
@@ -24,10 +24,25 @@ type ReportItem = Database['public']['Tables']['reports']['Row'] & {
 };
 
 export function MyReportsPage() {
-  const { user, isConfigured, isLoading: authLoading } = useAuth();
+  const { user, roles, isConfigured, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [reports, setReports] = useState<ReportItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // If user is a staff member, redirect immediately to their designated operations portal
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (roles.includes('municipal_official')) {
+        navigate('/admin', { replace: true });
+        return;
+      }
+      if (roles.includes('sanitation_worker')) {
+        navigate('/worker', { replace: true });
+        return;
+      }
+    }
+  }, [authLoading, user, roles, navigate]);
 
   const fetchReports = useCallback(async () => {
     if (!user) {
@@ -49,12 +64,12 @@ export function MyReportsPage() {
   }, [user]);
 
   useEffect(() => {
-    if (user) {
+    if (user && !roles.includes('municipal_official') && !roles.includes('sanitation_worker')) {
       fetchReports();
     } else if (!authLoading) {
       setIsLoading(false);
     }
-  }, [user, authLoading, fetchReports]);
+  }, [user, roles, authLoading, fetchReports]);
 
   if (!isConfigured) {
     return (

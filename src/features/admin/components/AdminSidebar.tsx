@@ -40,25 +40,27 @@ export function AdminSidebar({
   ];
 
   const content = (
-    <div className="h-full flex flex-col justify-between bg-white border-r border-slate-200">
+    <div className="h-full flex flex-col justify-between bg-slate-950/95 backdrop-blur-xl border-r border-slate-800/80">
       {/* Top Brand Identity */}
       <div>
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-100">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
           <Link to="/admin" className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-[#087F7B] flex items-center justify-center text-white font-bold text-base shadow-sm shrink-0">
-              S
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-swach-600 via-swach-500 to-gujarat-400 p-0.5 shadow-md shadow-swach-500/20 shrink-0">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <span className="font-extrabold text-swach-400 text-sm tracking-tighter">S</span>
+              </div>
             </div>
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-sm text-[#172B3A] tracking-tight truncate">
+                  <span className="font-extrabold text-sm text-white tracking-tight truncate">
                     S.W.A.C.H.
                   </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-50 text-[#087F7B] border border-teal-200">
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-swach-500/10 text-swach-400 border border-swach-500/20">
                     Navsari
                   </span>
                 </div>
-                <span className="text-[10px] font-semibold text-[#64748B] tracking-wide uppercase truncate">
+                <span className="text-[10px] font-semibold text-slate-400 tracking-wide uppercase truncate">
                   Municipal Operations
                 </span>
               </div>
@@ -69,7 +71,7 @@ export function AdminSidebar({
           <button
             type="button"
             onClick={onToggleCollapse}
-            className="hidden lg:flex p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            className="hidden lg:flex p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
           >
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -88,8 +90,8 @@ export function AdminSidebar({
                 cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors group',
                   isActive
-                    ? 'bg-teal-50 text-[#087F7B] font-bold border border-teal-100 shadow-sm'
-                    : 'text-[#64748B] hover:text-[#172B3A] hover:bg-slate-50'
+                    ? 'bg-swach-500/10 text-swach-400 font-bold border border-swach-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
                 )
               }
               title={isCollapsed ? item.label : undefined}
@@ -102,13 +104,13 @@ export function AdminSidebar({
       </div>
 
       {/* Bottom Authority & Return to Citizen Portal */}
-      <div className="p-3 border-t border-slate-100 space-y-2">
+      <div className="p-3 border-t border-slate-800 space-y-2">
         {!isCollapsed && (
-          <div className="p-2.5 rounded-xl bg-teal-50/60 border border-teal-100 text-[11px] text-[#087F7B] flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 shrink-0 text-[#087F7B]" />
+          <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-300 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 shrink-0 text-swach-400" />
             <div className="min-w-0">
-              <p className="font-bold truncate">Navsari Municipal Corp</p>
-              <p className="text-[10px] text-teal-700">Zone Operations Station</p>
+              <p className="font-bold truncate text-white">Navsari Municipal Corp</p>
+              <p className="text-[10px] text-slate-400">Zone Operations Station</p>
             </div>
           </div>
         )}
@@ -116,7 +118,7 @@ export function AdminSidebar({
         <Link
           to="/"
           className={cn(
-            'flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-[#64748B] hover:text-[#172B3A] hover:bg-slate-100 transition-colors',
+            'flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900/60 transition-colors',
             isCollapsed && 'justify-center'
           )}
           title="Exit to Citizen Portal"
@@ -137,7 +139,8 @@ export function AdminSidebar({
           isCollapsed ? 'w-20' : 'w-64'
         )}
       >
-        <div className="fixed top-0 bottom-0 left-0 transition-all duration-200 z-30 overflow-hidden"
+        <div
+          className="fixed top-0 bottom-0 left-0 transition-all duration-200 z-30 overflow-hidden"
           style={{ width: isCollapsed ? '5rem' : '16rem' }}
         >
           {content}
@@ -147,7 +150,7 @@ export function AdminSidebar({
       {/* Mobile Drawer Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden animate-fade-in"
+          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden animate-fade-in"
           onClick={onCloseMobile}
         />
       )}
@@ -155,7 +158,7 @@ export function AdminSidebar({
       {/* Mobile Drawer */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl transform transition-transform duration-200 lg:hidden',
+          'fixed inset-y-0 left-0 z-50 w-72 bg-slate-950 border-r border-slate-800 shadow-2xl transform transition-transform duration-200 lg:hidden',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >

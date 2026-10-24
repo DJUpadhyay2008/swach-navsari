@@ -59,16 +59,26 @@ export function getSafePostLoginRedirect(
     return defaultPath;
   }
 
-  // Protected Admin Portal: requires municipal_official
-  if (normalized === '/admin' || normalized.startsWith('/admin/')) {
-    return roles.includes('municipal_official') ? normalized : defaultPath;
+  // 1. Municipal Official: always route directly to municipal portal
+  // (Officers triage municipal operations and do not file citizen complaints)
+  if (roles.includes('municipal_official')) {
+    if (normalized === '/admin' || normalized.startsWith('/admin/')) {
+      return normalized;
+    }
+    return '/admin';
   }
 
-  // Protected Worker Portal: requires sanitation_worker or municipal_official
-  if (normalized === '/worker' || normalized.startsWith('/worker/')) {
-    return roles.includes('sanitation_worker') || roles.includes('municipal_official')
-      ? normalized
-      : defaultPath;
+  // 2. Sanitation Worker: always route directly to field sanitation portal
+  if (roles.includes('sanitation_worker')) {
+    if (normalized === '/worker' || normalized.startsWith('/worker/')) {
+      return normalized;
+    }
+    return '/worker';
+  }
+
+  // 3. Citizen: block access to staff portals and route safely
+  if (normalized.startsWith('/admin') || normalized.startsWith('/worker')) {
+    return defaultPath;
   }
 
   // Public / Citizen paths (e.g. /my-reports, /report, /community, /track, /reports/:id)

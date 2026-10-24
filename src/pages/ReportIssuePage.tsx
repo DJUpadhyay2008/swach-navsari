@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,8 +29,14 @@ import {
 } from 'lucide-react';
 
 export function ReportIssuePage() {
-  const { user, isConfigured } = useAuth();
+  const { user, roles, isConfigured } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && roles.includes('municipal_official')) {
+      navigate('/admin', { replace: true });
+    }
+  }, [user, roles, navigate]);
 
   // Photo state
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
