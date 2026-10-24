@@ -15,3 +15,5 @@ export interface WorkerTaskSummary {
   status: AssignmentStatus;
   assignedAt: string;
 }
+
+export * from '@/features/worker';
