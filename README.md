@@ -238,6 +238,7 @@ Evidence files are stored in **private Supabase Storage buckets**:
 - **Scoped Queue:** Isolated strictly to tasks dispatched to the logged-in worker ID via database RLS.
 - **Turn-by-Turn GPS Directions:** One-click Google Maps navigation directly to the incident coordinates.
 - **Field State Machine:** "Start Work on Site" (`in_progress`) and photo evidence upload (`resolution_submitted`).
+- **Real-Time Polling & Live Lifecycle Sync:** Automatic 3-second background polling and window-focus synchronization ensures supervisor approvals ("Approve & Mark Resolved") dynamically transition tasks to the **Completed** tab with verified badges and completion notes without requiring manual page refreshes.
 - **Quick-Fill Note Presets:** Touch-friendly buttons (`+ Done & site cleared`, `+ Waste collected and sanitized`, `+ Area completely cleaned`) satisfying statutory minimum character constraints.
 - **Task Categorization:** Live filter tabs for **Active Tasks**, **Under Review**, and **Completed** with instant tab routing on submission.
 - **Demo Mode Fallback:** Interactive seeded task (`NAV-2026-00101`) available when no live assignments are dispatched, allowing end-to-end testing of photo capture and submissions.
