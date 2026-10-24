@@ -577,23 +577,74 @@ export function WorkerPortalPage() {
                       )}
 
                       {/* Resolution Notes Input */}
-                      <div className="space-y-1">
-                        <label className="text-[11px] font-medium text-slate-300 flex items-center justify-between">
-                          <span>Resolution & Cleanup Summary Notes:</span>
-                          <span className={currentNotes.trim().length >= 5 ? 'text-emerald-400' : 'text-slate-500'}>
-                            {currentNotes.trim().length}/5 chars min
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-[11px] font-medium">
+                          <label className="text-slate-300">
+                            Resolution & Cleanup Summary Notes:
+                          </label>
+                          <span
+                            className={`font-semibold ${
+                              currentNotes.trim().length >= 5
+                                ? 'text-emerald-400'
+                                : currentNotes.trim().length > 0
+                                ? 'text-amber-400'
+                                : 'text-slate-500'
+                            }`}
+                          >
+                            {currentNotes.trim().length >= 5
+                              ? `✓ ${currentNotes.trim().length} chars (Ready)`
+                              : `${currentNotes.trim().length}/5 chars (Need ${5 - currentNotes.trim().length} more)`}
                           </span>
-                        </label>
+                        </div>
+
+                        {/* Quick Presets for Field Workers */}
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[10px] text-slate-500 font-medium">Quick fill:</span>
+                          {[
+                            'Done & site cleared',
+                            'Waste collected and sanitized',
+                            'Area completely cleaned',
+                            'Blockage cleared successfully',
+                          ].map((preset) => (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => {
+                                setResolutionNotes((prev) => ({
+                                  ...prev,
+                                  [task.assignmentId]: preset,
+                                }));
+                                setSubmissionFeedback((prev) => {
+                                  const copy = { ...prev };
+                                  delete copy[task.assignmentId];
+                                  return copy;
+                                });
+                              }}
+                              className="text-[10px] px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+                            >
+                              + {preset}
+                            </button>
+                          ))}
+                        </div>
+
                         <textarea
                           rows={2}
                           value={currentNotes}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const val = e.target.value;
                             setResolutionNotes((prev) => ({
                               ...prev,
-                              [task.assignmentId]: e.target.value,
-                            }))
-                          }
-                          placeholder="Describe the actions completed (e.g. Cleared 200kg plastic waste with mini-dumper and disinfected the perimeter)..."
+                              [task.assignmentId]: val,
+                            }));
+                            if (val.trim().length >= 5) {
+                              setSubmissionFeedback((prev) => {
+                                const copy = { ...prev };
+                                delete copy[task.assignmentId];
+                                return copy;
+                              });
+                            }
+                          }}
+                          placeholder="Describe the actions completed (e.g. Done & site cleared, 200kg waste cleared)..."
                           className="w-full text-xs bg-slate-900 border border-slate-800 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-swach-500/40"
                         />
                       </div>
@@ -661,9 +712,31 @@ export function WorkerPortalPage() {
                         variant="primary"
                         leftIcon={<CheckCircle2 className="w-4 h-4" />}
                         isLoading={isSubmitting}
-                        disabled={!currentSelectedPhoto || currentNotes.trim().length < 5 || isSubmitting}
+                        disabled={isSubmitting}
                         onClick={() => {
-                          if (!currentSelectedPhoto) return;
+                          if (!currentSelectedPhoto) {
+                            setSubmissionFeedback((prev) => ({
+                              ...prev,
+                              [task.assignmentId]: {
+                                type: 'error',
+                                message: 'Please select or capture a cleanup completion photo before submitting.',
+                              },
+                            }));
+                            fileInputRefs.current[task.assignmentId]?.click();
+                            return;
+                          }
+
+                          if (currentNotes.trim().length < 5) {
+                            setSubmissionFeedback((prev) => ({
+                              ...prev,
+                              [task.assignmentId]: {
+                                type: 'error',
+                                message: `Notes must be at least 5 characters (currently ${currentNotes.trim().length}/5). For example: "Done & cleared" or tap one of the quick fill buttons above.`,
+                              },
+                            }));
+                            return;
+                          }
+
                           submitResolutionMutation.mutate({
                             assignmentId: task.assignmentId,
                             reportId: task.reportId,
