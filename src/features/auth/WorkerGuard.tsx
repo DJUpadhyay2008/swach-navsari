@@ -14,12 +14,12 @@ export function WorkerGuard({ children }: WorkerGuardProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 animate-spin mb-4">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 animate-spin mb-4">
           <RefreshCw className="w-6 h-6" />
         </div>
-        <p className="text-sm font-semibold text-white">Verifying Worker Session...</p>
-        <p className="text-xs text-slate-400 mt-1">Checking field worker assignment authorization</p>
+        <p className="text-sm font-semibold text-slate-900">Verifying Worker Session...</p>
+        <p className="text-xs text-slate-500 mt-1">Checking field worker assignment authorization</p>
       </div>
     );
   }
@@ -34,27 +34,27 @@ export function WorkerGuard({ children }: WorkerGuardProps) {
 
   if (!isWorker && !isOfficial) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 text-slate-100">
-        <div className="max-w-md w-full bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl p-6 sm:p-8 text-center space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 text-slate-900">
+        <div className="max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-6 sm:p-8 text-center space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
             <ShieldAlert className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
               403 Forbidden — Field Worker Only
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Sanitation Worker Portal
             </h1>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Your account <span className="font-semibold text-slate-200 font-mono">({user.email})</span> is authenticated as:
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Your account <span className="font-semibold text-slate-800 font-mono">({user.email})</span> is authenticated as:
             </p>
             <div className="flex justify-center gap-2 pt-1">
               {roles.map((r) => (
                 <span
                   key={r}
-                  className="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-slate-800 text-slate-300 border border-slate-700"
+                  className="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200"
                 >
                   {r}
                 </span>
@@ -62,8 +62,8 @@ export function WorkerGuard({ children }: WorkerGuardProps) {
             </div>
           </div>
 
-          <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 text-left text-xs text-slate-400 space-y-1">
-            <p className="font-semibold text-slate-200">Worker RLS Boundary:</p>
+          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-left text-xs text-slate-600 space-y-1">
+            <p className="font-semibold text-slate-900">Worker RLS Boundary:</p>
             <p>
               This portal is restricted to active municipal sanitation field personnel dispatched by Navsari zone supervisors.
             </p>
@@ -86,7 +86,7 @@ export function WorkerGuard({ children }: WorkerGuardProps) {
               variant="ghost"
               size="sm"
               onClick={() => signOut()}
-              className="text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+              className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50"
               leftIcon={<LogIn className="w-3.5 h-3.5" />}
             >
               Sign Out & Switch Account

@@ -6,11 +6,11 @@ export function NotFoundPage() {
   return (
     <div className="flex-1 flex items-center justify-center p-6 text-center">
       <div className="max-w-md space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto text-amber-400">
+        <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
           <AlertCircle className="w-8 h-8" />
         </div>
-        <h1 className="text-3xl font-extrabold text-white">404 — Page Not Found</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="text-3xl font-extrabold text-slate-900">404 — Page Not Found</h1>
+        <p className="text-sm text-slate-500">
           The requested page could not be located on S.W.A.C.H. Navsari.
         </p>
         <div className="pt-2">

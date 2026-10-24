@@ -146,16 +146,16 @@ export function TrackComplaintPage() {
       {/* Title */}
       <div className="space-y-2">
         <Badge variant="default">Public Tracking</Badge>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
           Track Waste Complaint Status
         </h1>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-500">
           Enter your safe Complaint Identifier (NAV-YYYY-XXXXX) to check real-time municipal action and evidence.
         </p>
       </div>
 
       {/* Search Bar */}
-      <Card>
+      <Card className="bg-white border border-slate-200 shadow-xs">
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit(onSearch)} className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 space-y-1">
@@ -163,10 +163,10 @@ export function TrackComplaintPage() {
                 type="text"
                 placeholder="e.g. NAV-2026-00101"
                 {...register('complaint_id')}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 uppercase tracking-wider font-mono focus:outline-none focus:border-swach-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 uppercase tracking-wider font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white"
               />
               {errors.complaint_id && (
-                <p className="text-xs text-rose-400">{errors.complaint_id.message}</p>
+                <p className="text-xs text-rose-500">{errors.complaint_id.message}</p>
               )}
             </div>
             <Button
@@ -180,19 +180,19 @@ export function TrackComplaintPage() {
           </form>
 
           {/* Quick Demo Seed Pills */}
-          <div className="mt-3 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
+          <div className="mt-3 flex items-center gap-2 text-xs text-slate-500 flex-wrap">
             <span>Demo seed references:</span>
             <button
               type="button"
               onClick={() => setValue('complaint_id', 'NAV-2026-00101')}
-              className="text-swach-400 hover:underline font-mono bg-slate-800 px-2 py-0.5 rounded border border-slate-700"
+              className="text-emerald-700 hover:underline font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
             >
               NAV-2026-00101 (Dudhia Talav)
             </button>
             <button
               type="button"
               onClick={() => setValue('complaint_id', 'NAV-2026-00098')}
-              className="text-swach-400 hover:underline font-mono bg-slate-800 px-2 py-0.5 rounded border border-slate-700"
+              className="text-emerald-700 hover:underline font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
             >
               NAV-2026-00098 (Dandi Road)
             </button>
@@ -209,11 +209,11 @@ export function TrackComplaintPage() {
       {/* Result Display */}
       {reportResult && (
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-4">
+          <Card className="bg-white border border-slate-200 shadow-xs">
+            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xl font-bold text-white tracking-wider">
+                  <span className="font-mono text-xl font-bold text-slate-900 tracking-wider">
                     {reportResult.complaint_id}
                   </span>
                   <span
@@ -224,9 +224,9 @@ export function TrackComplaintPage() {
                     {STATUS_CONFIG[reportResult.status].label}
                   </span>
                 </div>
-                <div className="text-xs text-slate-400 mt-1 flex items-center gap-3">
+                <div className="text-xs text-slate-500 mt-1 flex items-center gap-3">
                   <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-gujarat-400" />
+                    <MapPin className="w-3.5 h-3.5 text-emerald-600" />
                     Ward {reportResult.ward_number} — {reportResult.address_locality}
                   </span>
                 </div>
@@ -246,7 +246,7 @@ export function TrackComplaintPage() {
             <CardContent className="pt-6 space-y-6">
               {/* Stepper Timeline */}
               <div className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Lifecycle Progress
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
@@ -261,10 +261,10 @@ export function TrackComplaintPage() {
                         key={st.key}
                         className={`p-2.5 rounded-xl border text-center transition-all ${
                           isCurrent
-                            ? 'bg-swach-500/20 border-swach-500 text-white font-semibold shadow-sm ring-1 ring-swach-500'
+                            ? 'bg-emerald-50 border-emerald-500 text-emerald-900 font-bold shadow-xs ring-1 ring-emerald-500'
                             : isCompleted
-                            ? 'bg-slate-900 border-emerald-500/40 text-emerald-400'
-                            : 'bg-slate-900/40 border-slate-800 text-slate-500'
+                            ? 'bg-emerald-50/50 border-emerald-200 text-emerald-700'
+                            : 'bg-slate-50 border-slate-200 text-slate-400'
                         }`}
                       >
                         <div className="text-[11px] truncate">{st.label}</div>
@@ -275,13 +275,13 @@ export function TrackComplaintPage() {
               </div>
 
               {/* Status explanation */}
-              <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-start gap-3">
-                <Info className="w-4 h-4 text-swach-400 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <Info className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div className="text-xs space-y-1">
-                  <div className="font-semibold text-slate-200">
+                  <div className="font-semibold text-slate-900">
                     Current Phase: {STATUS_CONFIG[reportResult.status].label}
                   </div>
-                  <div className="text-slate-400">
+                  <div className="text-slate-600">
                     {STATUS_CONFIG[reportResult.status].description}
                   </div>
                 </div>
@@ -289,39 +289,39 @@ export function TrackComplaintPage() {
 
               {/* Dates & Metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800 text-xs">
-                  <div className="text-slate-400 flex items-center gap-1 mb-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <div className="text-slate-500 flex items-center gap-1 mb-1">
                     <Calendar className="w-3.5 h-3.5" />
                     Submitted
                   </div>
-                  <div className="font-semibold text-slate-200">
+                  <div className="font-semibold text-slate-800">
                     {formatDate(reportResult.submitted_at)}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800 text-xs">
-                  <div className="text-slate-400 flex items-center gap-1 mb-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <div className="text-slate-500 flex items-center gap-1 mb-1">
                     <Clock className="w-3.5 h-3.5" />
                     Target SLA
                   </div>
-                  <div className="font-semibold text-slate-200">
+                  <div className="font-semibold text-slate-800">
                     {PRIORITY_CONFIG[reportResult.priority].slaHours} Hours Resolution
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800 text-xs">
-                  <div className="text-slate-400 flex items-center gap-1 mb-1">
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                  <div className="text-slate-500 flex items-center gap-1 mb-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     Status Verification
                   </div>
-                  <div className="font-semibold text-slate-200">
+                  <div className="font-semibold text-slate-800">
                     {reportResult.resolved_at ? formatDate(reportResult.resolved_at) : 'In Progress'}
                   </div>
                 </div>
               </div>
 
               {/* Detail link */}
-              <div className="pt-4 border-t border-slate-800 flex justify-end">
+              <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <Link to={`/reports/${reportResult.complaint_id}`}>
                   <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
                     View Detailed History &amp; Evidence

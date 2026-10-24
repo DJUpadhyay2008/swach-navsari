@@ -15,12 +15,12 @@ export function AdminGuard({ children }: AdminGuardProps) {
   // 1. Loading state — strictly prevent premature redirects or flashes of protected UI
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-swach-400 animate-spin mb-4">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 animate-spin mb-4">
           <RefreshCw className="w-6 h-6" />
         </div>
-        <p className="text-sm font-semibold text-white">Verifying Municipal Credentials...</p>
-        <p className="text-xs text-slate-400 mt-1">Checking cryptographic session against public.user_roles</p>
+        <p className="text-sm font-semibold text-slate-900">Verifying Municipal Credentials...</p>
+        <p className="text-xs text-slate-500 mt-1">Checking cryptographic session against public.user_roles</p>
       </div>
     );
   }
@@ -37,27 +37,27 @@ export function AdminGuard({ children }: AdminGuardProps) {
 
   if (!isOfficial) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 text-slate-100">
-        <div className="max-w-md w-full bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl p-6 sm:p-8 text-center space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mx-auto text-rose-400">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6 text-slate-900">
+        <div className="max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-6 sm:p-8 text-center space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center mx-auto text-rose-600">
             <ShieldAlert className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">
               403 Forbidden — Restricted Authority
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Municipal Official Access Required
             </h1>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Your account <span className="font-semibold text-slate-200 font-mono">({user.email})</span> is authenticated with role:
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Your account <span className="font-semibold text-slate-800 font-mono">({user.email})</span> is authenticated with role:
             </p>
             <div className="flex justify-center gap-2 pt-1">
               {roles.map((r) => (
                 <span
                   key={r}
-                  className="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-slate-800 text-slate-300 border border-slate-700"
+                  className="px-2.5 py-1 rounded-md text-xs font-mono font-medium bg-slate-100 text-slate-700 border border-slate-200"
                 >
                   {r}
                 </span>
@@ -65,10 +65,12 @@ export function AdminGuard({ children }: AdminGuardProps) {
             </div>
           </div>
 
-          <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 text-left text-xs text-slate-400 space-y-1">
-            <p className="font-semibold text-slate-200">Security Enforcement Notice:</p>
+          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-left text-xs text-slate-600 space-y-1">
+            <p className="font-semibold text-slate-900">Security Architecture Notice:</p>
             <p>
-              Under Gujarat Municipalities Act regulations, administrative triage and worker dispatching are restricted to designated municipal officers. Database Row Level Security (RLS) blocks unauthorized queries.
+              Row Level Security policies enforce that only authenticated users possessing the{' '}
+              <code className="text-rose-700 font-mono font-semibold">municipal_official</code> role in{' '}
+              <code className="text-slate-800 font-mono">public.user_roles</code> can access dispatch queues and analytics.
             </p>
           </div>
 
@@ -81,15 +83,15 @@ export function AdminGuard({ children }: AdminGuardProps) {
               </Link>
             )}
             <Link to="/my-reports" className="w-full">
-              <Button variant={isWorker ? "outline" : "primary"} className="w-full" leftIcon={<FileText className="w-4 h-4" />}>
-                Go to My Reports
+              <Button variant="outline" className="w-full" leftIcon={<FileText className="w-4 h-4" />}>
+                Go to Citizen Dashboard
               </Button>
             </Link>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => signOut()}
-              className="text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+              className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50"
               leftIcon={<LogIn className="w-3.5 h-3.5" />}
             >
               Sign Out & Switch Account
@@ -100,6 +102,5 @@ export function AdminGuard({ children }: AdminGuardProps) {
     );
   }
 
-  // 4. Authorized official
   return <>{children}</>;
 }

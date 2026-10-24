@@ -68,12 +68,12 @@ export function ReportDetailPage() {
   if (errorMessage || !report) {
     return (
       <div className="max-w-lg mx-auto px-4 py-12 space-y-6 text-center">
-        <div className="w-16 h-16 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto text-amber-400">
+        <div className="w-16 h-16 rounded-3xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
           <AlertCircle className="w-8 h-8" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">Complaint Not Found</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="text-2xl font-bold text-slate-900">Complaint Not Found</h2>
+          <p className="text-xs text-slate-500">
             {errorMessage || 'The requested complaint does not exist or access was restricted.'}
           </p>
         </div>
@@ -101,7 +101,7 @@ export function ReportDetailPage() {
       <div>
         <Link
           to="/my-reports"
-          className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-xs text-slate-500 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to My Reports</span>
@@ -109,11 +109,11 @@ export function ReportDetailPage() {
       </div>
 
       {/* Main Header Card */}
-      <Card>
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+      <Card className="bg-white border border-slate-200 shadow-xs">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 pb-5">
           <div className="space-y-1">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="font-mono text-2xl font-extrabold text-white tracking-wider">
+              <span className="font-mono text-2xl font-extrabold text-slate-900 tracking-wider">
                 {report.complaint_id}
               </span>
               <span
@@ -127,13 +127,13 @@ export function ReportDetailPage() {
                 {priorityMeta.label}
               </span>
             </div>
-            <div className="text-xs text-slate-400 flex items-center gap-4 flex-wrap pt-1">
+            <div className="text-xs text-slate-500 flex items-center gap-4 flex-wrap pt-1">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
                 Submitted {formatDate(report.submitted_at)}
               </span>
               {report.resolved_at && (
-                <span className="flex items-center gap-1.5 text-emerald-400">
+                <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
                   <Clock className="w-3.5 h-3.5" />
                   Resolved {formatDate(report.resolved_at)}
                 </span>
@@ -147,47 +147,47 @@ export function ReportDetailPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Badge variant="neutral">Category</Badge>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-slate-900">
                 {categoryMeta.label}
               </h3>
-              <span className="text-xs text-gujarat-400 font-medium">
+              <span className="text-xs text-emerald-700 font-medium">
                 ({categoryMeta.gujarati})
               </span>
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+            <p className="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
               {report.description}
             </p>
           </div>
 
           {/* Location Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 space-y-2">
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-gujarat-400" />
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-emerald-600" />
                 <span>Civic Locality</span>
               </div>
-              <div className="text-sm font-semibold text-white">
+              <div className="text-sm font-semibold text-slate-900">
                 {report.address_locality || 'Navsari Municipal Area'}
               </div>
               {report.landmark && (
-                <p className="text-xs text-slate-400">Landmark: {report.landmark}</p>
+                <p className="text-xs text-slate-500">Landmark: {report.landmark}</p>
               )}
               {report.ward_number && (
-                <p className="text-xs text-swach-400 font-medium">
+                <p className="text-xs text-emerald-700 font-medium">
                   Assigned Ward #{report.ward_number}
                 </p>
               )}
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 space-y-2">
-              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-swach-400" />
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-emerald-600" />
                 <span>Target SLA &amp; Resolution</span>
               </div>
-              <div className="text-sm font-semibold text-white">
+              <div className="text-sm font-semibold text-slate-900">
                 {priorityMeta.slaHours} Hours Standard Target
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 {statusMeta.description}
               </p>
               {report.latitude && report.longitude && (
@@ -195,7 +195,7 @@ export function ReportDetailPage() {
                   href={`https://maps.google.com/?q=${report.latitude},${report.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-swach-400 hover:underline pt-1"
+                  className="inline-flex items-center gap-1 text-xs text-emerald-700 hover:underline pt-1"
                 >
                   <span>Open Coordinates in Maps ({report.latitude.toFixed(4)}, {report.longitude.toFixed(4)})</span>
                   <ExternalLink className="w-3 h-3" />
@@ -212,9 +212,9 @@ export function ReportDetailPage() {
           )}
 
           {/* Photographic Evidence Gallery */}
-          <div className="space-y-3 pt-4 border-t border-slate-800">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Camera className="w-4 h-4 text-swach-400" />
+          <div className="space-y-3 pt-4 border-t border-slate-100">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+              <Camera className="w-4 h-4 text-emerald-600" />
               <span>Photographic Evidence ({report.media.length})</span>
             </h4>
 
@@ -226,7 +226,7 @@ export function ReportDetailPage() {
                   <div
                     key={m.id}
                     onClick={() => m.signedUrl && setSelectedImage(m.signedUrl)}
-                    className="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 aspect-video group cursor-pointer hover:border-swach-500/60 transition-all"
+                    className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100 aspect-video group cursor-pointer hover:border-emerald-500 transition-all shadow-xs"
                   >
                     {m.signedUrl ? (
                       <img
@@ -252,31 +252,31 @@ export function ReportDetailPage() {
           </div>
 
           {/* Status History Trail */}
-          <div className="space-y-3 pt-4 border-t border-slate-800">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <History className="w-4 h-4 text-swach-400" />
+          <div className="space-y-3 pt-4 border-t border-slate-100">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+              <History className="w-4 h-4 text-emerald-600" />
               <span>Status Lifecycle Audit History</span>
             </h4>
 
             {report.history.length === 0 ? (
               <p className="text-xs text-slate-500 italic">No status transitions logged yet.</p>
             ) : (
-              <div className="relative pl-6 border-l-2 border-slate-800 space-y-4">
+              <div className="relative pl-6 border-l-2 border-slate-200 space-y-4">
                 {report.history.map((h) => {
                   const sMeta = STATUS_CONFIG[h.new_status];
                   return (
                     <div key={h.id} className="relative group">
-                      <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-swach-500 ring-4 ring-slate-950" />
-                      <div className="text-xs font-semibold text-white flex items-center gap-2">
+                      <div className="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-emerald-600 ring-4 ring-white" />
+                      <div className="text-xs font-semibold text-slate-900 flex items-center gap-2">
                         <span className={`px-2 py-0.5 rounded text-[10px] border ${sMeta.badgeClass}`}>
                           {sMeta.label}
                         </span>
-                        <span className="text-slate-400 font-normal">
+                        <span className="text-slate-500 font-normal">
                           {formatDate(h.created_at)}
                         </span>
                       </div>
                       {h.note && (
-                        <p className="text-xs text-slate-300 mt-1 italic">
+                        <p className="text-xs text-slate-600 mt-1 italic">
                           &ldquo;{h.note}&rdquo;
                         </p>
                       )}

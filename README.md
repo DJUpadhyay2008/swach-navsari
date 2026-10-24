@@ -22,7 +22,7 @@ The platform establishes an end-to-end civic ecosystem connecting three core per
 ### Frontend
 - **Framework:** React 18 with TypeScript in strict mode
 - **Bundler / Dev Server:** Vite 7
-- **Styling:** Tailwind CSS with custom civic green (`swach`), warm saffron (`gujarat`), and high-contrast dark theme
+- **Styling:** Tailwind CSS with custom civic green (`swach`), warm saffron (`gujarat`), and pure light theme architecture (soft grey `#F8FAFC` page backdrop, crisp `#FFFFFF` cards, `#E2E8F0` borders, `#0F172A` typography, and deep navy executive sidebar)
 - **Routing:** React Router v7 (`createBrowserRouter`) with role-based route guards (`AdminGuard`, `WorkerGuard`)
 - **Icons:** Lucide React
 - **Validation:** Zod schemas integrated with React Hook Form

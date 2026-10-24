@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { getCitizenReports } from '@/features/reports/reportsService';
@@ -23,10 +23,13 @@ type ReportItem = Database['public']['Tables']['reports']['Row'] & {
   mediaThumbUrl?: string | null;
 };
 
+type FilterStatus = 'all' | 'submitted' | 'in_progress' | 'resolved';
+
 export function MyReportsPage() {
   const { user, roles, isConfigured, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [reports, setReports] = useState<ReportItem[]>([]);
+  const [filter, setFilter] = useState<FilterStatus>('all');
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -71,6 +74,14 @@ export function MyReportsPage() {
     }
   }, [user, roles, authLoading, fetchReports]);
 
+  const filteredReports = useMemo(() => {
+    if (filter === 'all') return reports;
+    if (filter === 'submitted') return reports.filter((r) => r.status === 'submitted');
+    if (filter === 'in_progress') return reports.filter((r) => r.status === 'assigned' || r.status === 'in_progress' || r.status === 'resolution_submitted');
+    if (filter === 'resolved') return reports.filter((r) => r.status === 'resolved');
+    return reports;
+  }, [reports, filter]);
+
   if (!isConfigured) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-6">
@@ -84,11 +95,11 @@ export function MyReportsPage() {
   if (!authLoading && !user) {
     return (
       <div className="max-w-md mx-auto my-12 px-4 text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-amber-600">
           <Lock className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-bold text-white">Sign In to View Your Reports</h2>
-        <p className="text-xs text-slate-400">
+        <h2 className="text-xl font-bold text-slate-900">Sign In to View Your Reports</h2>
+        <p className="text-xs text-slate-500">
           Your complaint history and resolution proofs are protected by PostgreSQL Row Level Security.
         </p>
         <div className="pt-2">
@@ -103,7 +114,7 @@ export function MyReportsPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
@@ -111,10 +122,10 @@ export function MyReportsPage() {
             <Badge variant="default">Citizen Dashboard</Badge>
             <Badge variant="neutral">Verified Scope</Badge>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             My Submitted Complaints
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-500">
             Real-time track of all cleanliness complaints submitted by your account.
           </p>
         </div>
@@ -137,6 +148,32 @@ export function MyReportsPage() {
         </div>
       </div>
 
+      {/* Filter Tabs (Screen 6 in Mockup) */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto">
+        {(['all', 'submitted', 'in_progress', 'resolved'] as const).map((tab) => {
+          const labels: Record<FilterStatus, string> = {
+            all: 'All',
+            submitted: 'Submitted',
+            in_progress: 'In Progress',
+            resolved: 'Resolved',
+          };
+          const active = filter === tab;
+          return (
+            <button
+              key={tab}
+              onClick={() => setFilter(tab)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                active
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              {labels[tab]}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Error state */}
       {errorMessage && (
         <Alert variant="error" title="Failed to Load Complaints">
@@ -155,25 +192,27 @@ export function MyReportsPage() {
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 animate-pulse space-y-3"
+              className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs animate-pulse space-y-3"
             >
-              <div className="h-5 w-48 bg-slate-800 rounded" />
-              <div className="h-4 w-full bg-slate-800/60 rounded" />
-              <div className="h-4 w-3/4 bg-slate-800/40 rounded" />
+              <div className="h-5 w-48 bg-slate-100 rounded" />
+              <div className="h-4 w-full bg-slate-100 rounded" />
+              <div className="h-4 w-3/4 bg-slate-100 rounded" />
             </div>
           ))}
         </div>
       )}
 
       {/* Empty state */}
-      {!isLoading && !errorMessage && reports.length === 0 && (
-        <Card className="text-center py-12 px-4 space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mx-auto text-slate-400">
+      {!isLoading && !errorMessage && filteredReports.length === 0 && (
+        <Card className="text-center py-12 px-4 space-y-4 bg-white border border-slate-200 shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center mx-auto text-slate-400">
             <ClipboardList className="w-6 h-6" />
           </div>
-          <CardTitle>No Complaints Filed Yet</CardTitle>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto">
-            You have not registered any cleanliness complaints. If you spot uncollected garbage or drainage issues in Navsari, report it to dispatch workers!
+          <CardTitle className="text-slate-900 font-bold">No Complaints Found</CardTitle>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            {filter === 'all'
+              ? 'You have not registered any cleanliness complaints. If you spot uncollected garbage or drainage issues in Navsari, report it to dispatch workers!'
+              : `No complaints found in the "${filter.replace('_', ' ')}" status tab.`}
           </p>
           <div className="pt-2">
             <Link to="/report">
@@ -186,9 +225,9 @@ export function MyReportsPage() {
       )}
 
       {/* Reports list */}
-      {!isLoading && reports.length > 0 && (
+      {!isLoading && filteredReports.length > 0 && (
         <div className="space-y-4">
-          {reports.map((report) => {
+          {filteredReports.map((report) => {
             const statusMeta = STATUS_CONFIG[report.status];
             const priorityMeta = PRIORITY_CONFIG[report.priority];
             const categoryMeta = CATEGORY_LABELS[report.category];
@@ -196,10 +235,10 @@ export function MyReportsPage() {
             return (
               <Card
                 key={report.id}
-                className="glass-card-hover overflow-hidden border border-slate-800 flex flex-col sm:flex-row gap-5 p-5 items-start"
+                className="overflow-hidden bg-white border border-slate-200 shadow-xs hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-5 p-5 items-start rounded-2xl"
               >
                 {/* Thumbnail slot */}
-                <div className="w-full sm:w-40 sm:h-32 h-44 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shrink-0 flex items-center justify-center relative group">
+                <div className="w-full sm:w-40 sm:h-32 h-44 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center relative group">
                   {report.mediaThumbUrl ? (
                     <img
                       src={report.mediaThumbUrl}
@@ -207,9 +246,9 @@ export function MyReportsPage() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="text-center p-3 text-slate-600 space-y-1">
-                      <Camera className="w-6 h-6 mx-auto opacity-40" />
-                      <span className="text-[10px] block">No photo</span>
+                    <div className="text-center p-3 text-slate-400 space-y-1">
+                      <Camera className="w-6 h-6 mx-auto opacity-60" />
+                      <span className="text-[10px] block font-medium">No photo</span>
                     </div>
                   )}
                 </div>
@@ -218,7 +257,7 @@ export function MyReportsPage() {
                 <div className="flex-1 space-y-3 w-full">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-base text-white tracking-wider">
+                      <span className="font-mono font-bold text-base text-slate-900 tracking-wider">
                         {report.complaint_id}
                       </span>
                       <span
@@ -236,20 +275,20 @@ export function MyReportsPage() {
                   </div>
 
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
                       <span>{categoryMeta.label}</span>
-                      <span className="text-[11px] text-gujarat-400 font-normal">
+                      <span className="text-[11px] text-emerald-700 font-normal">
                         ({categoryMeta.gujarati})
                       </span>
                     </h4>
-                    <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                    <p className="text-xs text-slate-600 line-clamp-2 mt-1 leading-relaxed">
                       {report.description}
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-1 border-t border-slate-800/60">
+                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 pt-1 border-t border-slate-100">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-gujarat-400" />
+                      <MapPin className="w-3.5 h-3.5 text-emerald-600" />
                       <span>
                         {report.ward_number ? `Ward ${report.ward_number} — ` : ''}
                         {report.address_locality || 'Navsari municipal area'}
@@ -257,7 +296,7 @@ export function MyReportsPage() {
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5" />
+                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       <span>{formatDate(report.submitted_at)}</span>
                     </div>
                   </div>
@@ -266,7 +305,7 @@ export function MyReportsPage() {
                 {/* Link to detail */}
                 <div className="shrink-0 self-end sm:self-center w-full sm:w-auto pt-2 sm:pt-0">
                   <Link to={`/reports/${report.complaint_id}`} className="w-full sm:w-auto block">
-                    <Button variant="outline" size="sm" className="w-full sm:w-auto" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto border-slate-200 text-slate-700 hover:bg-slate-50" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
                       View Detail
                     </Button>
                   </Link>

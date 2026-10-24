@@ -261,15 +261,15 @@ export function WorkerPortalPage() {
             <Badge variant="warning">Worker Portal</Badge>
             <Badge variant="neutral">Role: sanitation_worker</Badge>
             {profile?.full_name && (
-              <span className="text-xs text-slate-300 font-medium px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">
+              <span className="text-xs text-slate-700 font-medium px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200">
                 Worker: {profile.full_name}
               </span>
             )}
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
             Field Sanitation Task Board
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-500">
             Mobile-responsive task queue for Navsari sanitation workers and rapid response units.
           </p>
         </div>
@@ -292,28 +292,28 @@ export function WorkerPortalPage() {
         <Alert variant="warning" title="Worker Session Notice">
           <p>
             In production, tasks displayed on this page are strictly scoped by the database RLS policy{' '}
-            <code className="text-amber-300 font-mono">reports_select_policy</code> where{' '}
-            <code className="text-amber-300 font-mono">public.is_assigned_worker(reports.id, auth.uid())</code>{' '}
+            <code className="text-amber-800 font-mono font-semibold">reports_select_policy</code> where{' '}
+            <code className="text-amber-800 font-mono font-semibold">public.is_assigned_worker(reports.id, auth.uid())</code>{' '}
             is true.
           </p>
         </Alert>
       ) : (
         <Alert variant="success" title="Worker Scope Secured">
           Connected to database. Task queue is isolated to tasks assigned to your worker ID (
-          <code className="text-slate-300 font-mono text-xs">{user?.id || 'demo-worker'}</code>).
+          <code className="text-slate-700 font-mono text-xs">{user?.id || 'demo-worker'}</code>).
         </Alert>
       )}
 
       {/* Notice if displaying demo task */}
       {isUsingDemo && (
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-3">
-          <HardHat className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-3">
+          <HardHat className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <div className="font-semibold text-white">
+            <div className="font-semibold text-slate-900">
               No live assignments currently dispatched to your account in database
             </div>
-            <p className="text-slate-300">
-              Displaying the interactive Navsari demo task (<strong className="text-amber-300">NAV-2026-00101</strong>) below.
+            <p className="text-slate-600">
+              Displaying the interactive Navsari demo task (<strong className="text-amber-800">NAV-2026-00101</strong>) below.
               You can test the entire field flow: open GPS directions, upload photo evidence, and submit resolution for supervisor verification.
             </p>
           </div>
@@ -328,18 +328,18 @@ export function WorkerPortalPage() {
       )}
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
         <button
           onClick={() => setFilterTab('active')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             filterTab === 'active'
-              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-amber-50 text-amber-800 border border-amber-300 shadow-xs'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
-          <HardHat className="w-3.5 h-3.5" />
+          <HardHat className="w-3.5 h-3.5 text-amber-600" />
           <span>Active Tasks</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-slate-300">
+          <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-bold">
             {activeCount}
           </span>
         </button>
@@ -348,13 +348,13 @@ export function WorkerPortalPage() {
           onClick={() => setFilterTab('review')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             filterTab === 'review'
-              ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-teal-50 text-teal-800 border border-teal-300 shadow-xs'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
-          <FileCheck className="w-3.5 h-3.5" />
+          <FileCheck className="w-3.5 h-3.5 text-teal-600" />
           <span>Under Review</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-slate-300">
+          <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-bold">
             {reviewCount}
           </span>
         </button>
@@ -363,13 +363,13 @@ export function WorkerPortalPage() {
           onClick={() => setFilterTab('resolved')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             filterTab === 'resolved'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-xs'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
-          <CheckCircle2 className="w-3.5 h-3.5" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
           <span>Completed</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-slate-300">
+          <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-bold">
             {resolvedCount}
           </span>
         </button>
@@ -378,12 +378,12 @@ export function WorkerPortalPage() {
           onClick={() => setFilterTab('all')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             filterTab === 'all'
-              ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
         >
           <span>All Tasks</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-slate-300">
+          <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-bold">
             {tasks.length}
           </span>
         </button>
@@ -393,14 +393,14 @@ export function WorkerPortalPage() {
       <div className="space-y-6">
         {isLoading ? (
           <div className="py-12 text-center space-y-3">
-            <RefreshCw className="w-8 h-8 text-amber-400 animate-spin mx-auto" />
-            <p className="text-sm text-slate-400">Loading assigned tasks from database...</p>
+            <RefreshCw className="w-8 h-8 text-amber-500 animate-spin mx-auto" />
+            <p className="text-sm text-slate-500">Loading assigned tasks from database...</p>
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-3">
-            <HardHat className="w-10 h-10 text-slate-600 mx-auto" />
-            <h3 className="text-base font-bold text-white">No tasks in this category</h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+          <div className="p-8 rounded-2xl bg-white border border-slate-200 text-center space-y-3 shadow-xs">
+            <HardHat className="w-10 h-10 text-slate-400 mx-auto" />
+            <h3 className="text-base font-bold text-slate-900">No tasks in this category</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
               There are no tasks matching the selected filter ({filterTab}). Check other tabs or refresh your queue.
             </p>
           </div>
@@ -422,11 +422,11 @@ export function WorkerPortalPage() {
             if (task.reportStatus === 'resolved') borderAccent = 'border-l-emerald-500';
 
             return (
-              <Card key={task.assignmentId} className={`border-l-4 ${borderAccent} bg-slate-900/60 shadow-xl`}>
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800/80 pb-4">
+              <Card key={task.assignmentId} className={`border-l-4 ${borderAccent} bg-white border border-slate-200 shadow-xs rounded-2xl overflow-hidden`}>
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-mono text-lg font-bold text-white tracking-wide">
+                      <span className="font-mono text-lg font-bold text-slate-900 tracking-wide">
                         {task.complaintId}
                       </span>
                       <span className={`text-xs px-2.5 py-0.5 rounded-full border font-semibold ${statusConfig.badgeClass}`}>
@@ -436,25 +436,25 @@ export function WorkerPortalPage() {
                         {priorityConfig.label}
                       </span>
                       {categoryMeta && (
-                        <span className="text-xs text-slate-300 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">
+                        <span className="text-xs text-slate-700 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 font-medium">
                           {categoryMeta.label}
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-400 flex items-center gap-1.5 flex-wrap">
-                      <MapPin className="w-3.5 h-3.5 text-swach-400 shrink-0" />
-                      <span className="font-medium text-slate-200">
+                    <div className="text-xs text-slate-500 flex items-center gap-1.5 flex-wrap">
+                      <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span className="font-medium text-slate-800">
                         Ward {task.wardNumber} — {task.addressLocality}
                       </span>
                       {task.landmark && (
-                        <span className="text-slate-500">({task.landmark})</span>
+                        <span className="text-slate-400">({task.landmark})</span>
                       )}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="text-xs text-amber-400 font-medium flex items-center gap-1 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
-                      <Clock className="w-3.5 h-3.5" />
+                    <div className="text-xs text-amber-800 font-medium flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                      <Clock className="w-3.5 h-3.5 text-amber-600" />
                       <span>SLA: {priorityConfig.slaHours}h Target</span>
                     </div>
                   </div>
@@ -462,24 +462,24 @@ export function WorkerPortalPage() {
 
                 <CardContent className="pt-4 space-y-4">
                   {/* Complaint Description */}
-                  <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-300 space-y-1">
-                    <div className="font-semibold text-slate-200 flex items-center justify-between">
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
+                    <div className="font-semibold text-slate-900 flex items-center justify-between">
                       <span>Citizen Complaint Details:</span>
-                      <span className="text-[11px] text-slate-500">
+                      <span className="text-[11px] text-slate-500 font-normal">
                         Filed: {formatDate(task.assignedAt)}
                       </span>
                     </div>
-                    <p className="text-slate-400 leading-relaxed">{task.description}</p>
+                    <p className="text-slate-600 leading-relaxed">{task.description}</p>
                   </div>
 
                   {/* Task Instruction from Official */}
                   {task.officialInstructions && (
-                    <div className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-800/40 text-xs text-amber-200 space-y-1">
-                      <div className="font-semibold text-amber-300 flex items-center gap-1.5">
-                        <HardHat className="w-4 h-4 text-amber-400" />
+                    <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 space-y-1">
+                      <div className="font-semibold text-amber-900 flex items-center gap-1.5">
+                        <HardHat className="w-4 h-4 text-amber-600" />
                         <span>Official Dispatch Instruction:</span>
                       </div>
-                      <p className="text-slate-300 leading-relaxed">
+                      <p className="text-slate-700 leading-relaxed">
                         &ldquo;{task.officialInstructions}&rdquo;
                       </p>
                     </div>
@@ -490,14 +490,14 @@ export function WorkerPortalPage() {
                     <div
                       className={`p-3.5 rounded-xl text-xs flex items-center gap-2 ${
                         feedback.type === 'success'
-                          ? 'bg-emerald-950/40 border border-emerald-800/60 text-emerald-300'
-                          : 'bg-rose-950/40 border border-rose-800/60 text-rose-300'
+                          ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+                          : 'bg-rose-50 border border-rose-200 text-rose-800'
                       }`}
                     >
                       {feedback.type === 'success' ? (
-                        <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0" />
                       ) : (
-                        <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                        <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                       )}
                       <span>{feedback.message}</span>
                     </div>
@@ -505,12 +505,12 @@ export function WorkerPortalPage() {
 
                   {/* State 1: ASSIGNED (Needs Start Work) */}
                   {task.reportStatus === 'assigned' && (
-                    <div className="p-4 rounded-xl border border-dashed border-cyan-800/60 bg-cyan-950/20 text-center space-y-3">
-                      <Play className="w-7 h-7 mx-auto text-cyan-400" />
-                      <div className="text-xs font-semibold text-cyan-200">
+                    <div className="p-4 rounded-xl border border-dashed border-sky-300 bg-sky-50/60 text-center space-y-3">
+                      <Play className="w-7 h-7 mx-auto text-sky-600" />
+                      <div className="text-xs font-semibold text-sky-900">
                         Task Dispatched to Your Unit
                       </div>
-                      <p className="text-[11px] text-slate-400 max-w-md mx-auto">
+                      <p className="text-[11px] text-slate-600 max-w-md mx-auto">
                         Acknowledge receipt and begin field transit to site to record your start time.
                       </p>
                       <Button
@@ -533,15 +533,15 @@ export function WorkerPortalPage() {
 
                   {/* State 2: IN_PROGRESS (Upload Photo and Submit Resolution) */}
                   {task.reportStatus === 'in_progress' && (
-                    <div className="p-4 rounded-xl border border-dashed border-slate-700 bg-slate-950/50 space-y-4">
+                    <div className="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 space-y-4">
                       <div className="text-center space-y-1">
-                        <Camera className="w-6 h-6 mx-auto text-swach-400" />
-                        <div className="text-xs font-semibold text-slate-200">
+                        <Camera className="w-6 h-6 mx-auto text-emerald-600" />
+                        <div className="text-xs font-semibold text-slate-900">
                           Upload Post-Cleanup Resolution Photo
                         </div>
-                        <p className="text-[11px] text-slate-400 max-w-md mx-auto">
+                        <p className="text-[11px] text-slate-500 max-w-md mx-auto">
                           Evidence photos are automatically stored in the private{' '}
-                          <code className="text-slate-300">resolution-evidence</code> bucket and verified by
+                          <code className="text-slate-800 font-mono">resolution-evidence</code> bucket and verified by
                           the municipal supervisor before final closure.
                         </p>
                       </div>
@@ -559,7 +559,7 @@ export function WorkerPortalPage() {
                       {/* Photo Preview or Selection Area */}
                       {currentSelectedPhoto ? (
                         <div className="space-y-2">
-                          <div className="relative rounded-xl overflow-hidden border border-slate-700 bg-black/60 max-h-64 flex items-center justify-center">
+                          <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-white max-h-64 flex items-center justify-center shadow-xs">
                             <img
                               src={currentSelectedPhoto.previewUrl}
                               alt="Cleanup resolution evidence"
@@ -574,7 +574,7 @@ export function WorkerPortalPage() {
                               <X className="w-4 h-4" />
                             </button>
                           </div>
-                          <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                          <div className="flex items-center justify-between text-[11px] text-slate-500 px-1">
                             <span>{currentSelectedPhoto.file.name}</span>
                             <span>{(currentSelectedPhoto.file.size / 1024).toFixed(0)} KB</span>
                           </div>
@@ -596,16 +596,16 @@ export function WorkerPortalPage() {
                       {/* Resolution Notes Input */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-[11px] font-medium">
-                          <label className="text-slate-300">
+                          <label className="text-slate-800 font-semibold">
                             Resolution & Cleanup Summary Notes:
                           </label>
                           <span
                             className={`font-semibold ${
                               currentNotes.trim().length >= 5
-                                ? 'text-emerald-400'
+                                ? 'text-emerald-700'
                                 : currentNotes.trim().length > 0
-                                ? 'text-amber-400'
-                                : 'text-slate-500'
+                                ? 'text-amber-700'
+                                : 'text-slate-400'
                             }`}
                           >
                             {currentNotes.trim().length >= 5
@@ -637,7 +637,7 @@ export function WorkerPortalPage() {
                                   return copy;
                                 });
                               }}
-                              className="text-[10px] px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+                              className="text-[10px] px-2 py-0.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors"
                             >
                               + {preset}
                             </button>
@@ -662,7 +662,7 @@ export function WorkerPortalPage() {
                             }
                           }}
                           placeholder="Describe the actions completed (e.g. Done & site cleared, 200kg waste cleared)..."
-                          className="w-full text-xs bg-slate-900 border border-slate-800 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-swach-500/40"
+                          className="w-full text-xs bg-white border border-slate-300 rounded-xl p-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
                     </div>
@@ -670,13 +670,13 @@ export function WorkerPortalPage() {
 
                   {/* State 3: RESOLUTION_SUBMITTED (Under Verification) */}
                   {task.reportStatus === 'resolution_submitted' && (
-                    <div className="p-4 rounded-xl bg-teal-950/20 border border-teal-800/40 space-y-3">
-                      <div className="flex items-center gap-2 text-teal-300 text-xs font-semibold">
-                        <FileCheck className="w-4 h-4 text-teal-400" />
+                    <div className="p-4 rounded-xl bg-teal-50 border border-teal-200 space-y-3">
+                      <div className="flex items-center gap-2 text-teal-800 text-xs font-semibold">
+                        <FileCheck className="w-4 h-4 text-teal-600" />
                         <span>Resolution Evidence Submitted — Awaiting Supervisor Verification</span>
                       </div>
                       {task.resolutionPhotoUrl && (
-                        <div className="rounded-xl overflow-hidden border border-teal-900/40 bg-black/40 max-h-48 flex items-center justify-center">
+                        <div className="rounded-xl overflow-hidden border border-teal-200 bg-white max-h-48 flex items-center justify-center">
                           <img
                             src={task.resolutionPhotoUrl}
                             alt="Resolution evidence"
@@ -685,8 +685,8 @@ export function WorkerPortalPage() {
                         </div>
                       )}
                       {task.resolutionNotes && (
-                        <div className="text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                          <span className="font-medium text-slate-400 block mb-0.5">Submitted Notes:</span>
+                        <div className="text-xs text-slate-700 bg-white p-2.5 rounded-lg border border-teal-200">
+                          <span className="font-medium text-slate-500 block mb-0.5">Submitted Notes:</span>
                           <p>{task.resolutionNotes}</p>
                         </div>
                       )}
@@ -695,13 +695,13 @@ export function WorkerPortalPage() {
 
                   {/* State 4: RESOLVED (Final Verified State) */}
                   {task.reportStatus === 'resolved' && (
-                    <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/40 space-y-3">
-                      <div className="flex items-center gap-2 text-emerald-300 text-xs font-semibold">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-3">
+                      <div className="flex items-center gap-2 text-emerald-800 text-xs font-semibold">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                         <span>Verified & Closed by Municipal Supervisor</span>
                       </div>
                       {task.resolutionPhotoUrl && (
-                        <div className="rounded-xl overflow-hidden border border-emerald-900/40 bg-black/40 max-h-48 flex items-center justify-center">
+                        <div className="rounded-xl overflow-hidden border border-emerald-200 bg-white max-h-48 flex items-center justify-center">
                           <img
                             src={task.resolutionPhotoUrl}
                             alt="Verified resolution"
@@ -710,8 +710,8 @@ export function WorkerPortalPage() {
                         </div>
                       )}
                       {task.resolutionNotes && (
-                        <div className="text-xs text-slate-300 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-                          <span className="font-medium text-slate-400 block mb-0.5">Verified Completion Notes:</span>
+                        <div className="text-xs text-slate-700 bg-white p-2.5 rounded-lg border border-emerald-200">
+                          <span className="font-medium text-slate-500 block mb-0.5">Verified Completion Notes:</span>
                           <p>{task.resolutionNotes}</p>
                         </div>
                       )}
@@ -719,7 +719,7 @@ export function WorkerPortalPage() {
                   )}
 
                   {/* Action Bar */}
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between flex-wrap gap-3">
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between flex-wrap gap-3">
                     <Button
                       size="sm"
                       variant="ghost"
@@ -782,12 +782,12 @@ export function WorkerPortalPage() {
       </div>
 
       {/* Security Architecture note */}
-      <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
-        <Lock className="w-4 h-4 text-swach-400 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-600 flex items-start gap-3 shadow-xs">
+        <Lock className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
         <div>
-          <span className="font-semibold text-slate-200">Worker Authorization Boundary:</span>{' '}
+          <span className="font-semibold text-slate-900">Worker Authorization Boundary:</span>{' '}
           Sanitation workers cannot assign complaints to other workers or dismiss reports without
-          submitting photographic evidence in <code className="text-swach-300">resolution_evidence</code>.
+          submitting photographic evidence in <code className="text-emerald-700 font-semibold">resolution_evidence</code>.
         </div>
       </div>
     </div>
