@@ -5,7 +5,6 @@ import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { useAuth } from '@/features/auth';
 import {
   Sparkles,
-  MapPin,
   ClipboardList,
   Search,
   ShieldCheck,
@@ -18,6 +17,8 @@ import {
   LogIn,
   LogOut,
   User,
+  Leaf,
+  Map,
 } from 'lucide-react';
 
 export function Header() {
@@ -35,6 +36,7 @@ export function Header() {
     if (isLoading) {
       return [
         { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
+        { label: 'Map', path: '/map', icon: <Map className="w-4 h-4" /> },
         { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
       ];
     }
@@ -42,16 +44,18 @@ export function Header() {
     if (!user) {
       return [
         { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
-        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+        { label: 'Map', path: '/map', icon: <Map className="w-4 h-4" /> },
         { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
       ];
     }
 
     if (isOfficial) {
       return [
         { label: 'Municipal Portal', path: '/admin', icon: <ShieldCheck className="w-4 h-4" /> },
-        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
+        { label: 'City Map', path: '/admin/map', icon: <Map className="w-4 h-4" /> },
         { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+        { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
       ];
     }
 
@@ -64,9 +68,11 @@ export function Header() {
 
     // Default: Citizen
     return [
+      { label: 'Home', path: '/', icon: <Sparkles className="w-4 h-4" /> },
+      { label: 'Map', path: '/map', icon: <Map className="w-4 h-4" /> },
       { label: 'My Reports', path: '/my-reports', icon: <FileText className="w-4 h-4" /> },
-      { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
       { label: 'Community', path: '/community', icon: <Users className="w-4 h-4" /> },
+      { label: 'Track Status', path: '/track', icon: <Search className="w-4 h-4" /> },
     ];
   }, [isLoading, user, isOfficial, isWorker]);
 
@@ -79,30 +85,27 @@ export function Header() {
   const displayName = profile?.full_name || user?.email?.split('@')[0] || roleLabel;
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800/80">
+    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-lg border-b border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Civic Branding */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-swach-600 via-swach-500 to-gujarat-400 p-0.5 shadow-lg shadow-swach-500/20 group-hover:shadow-swach-500/40 transition-shadow">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <span className="font-extrabold text-swach-400 text-lg tracking-tighter">
-                  S
-                </span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center text-emerald-400">
+                <Leaf className="w-5 h-5 fill-emerald-400/20 text-emerald-400" />
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-base tracking-tight text-white group-hover:text-swach-300 transition-colors">
-                  S.W.A.C.H.
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-base tracking-tight text-white group-hover:text-emerald-300 transition-colors">
+                  My Clean Navsari
                 </span>
-                <span className="text-xs font-semibold px-1.5 py-0.5 rounded bg-swach-500/10 text-swach-400 border border-swach-500/20">
-                  Navsari
+                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  NMC
                 </span>
               </div>
               <div className="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
-                <MapPin className="w-2.5 h-2.5 text-gujarat-400" />
-                <span>Report. Resolve. Revive.</span>
+                <span>Clean City • Stronger Community</span>
               </div>
             </div>
           </Link>

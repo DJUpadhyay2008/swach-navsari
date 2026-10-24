@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import type { ReportRow } from '../types';
-import { NAVSARI_WARDS, CATEGORY_LABELS, formatDate } from '@/lib/utils';
+import { NAVSARI_WARDS, CATEGORY_LABELS } from '@/lib/utils';
 import { StatusBadge } from './StatusBadge';
-import { SlaBadge } from './SlaBadge';
-import { MapPin, Navigation, ExternalLink, Filter } from 'lucide-react';
+import { Navigation, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 
@@ -259,68 +258,99 @@ export function NavsariInteractiveMap({ reports, onSelectReport }: NavsariIntera
           </div>
         </div>
 
-        {/* Selected Complaint Inspector Sheet */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
-          {selectedReport ? (
-            <div className="space-y-4">
-              <div className="flex items-start justify-between">
+        {/* Hotspots & Selected Complaint Inspector Sheet (Matches Mockup Screen 4) */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-4">
+          <div>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="text-sm font-bold text-slate-900">Hotspots</h3>
+              <span className="text-[11px] text-slate-400 font-medium">Top Priority Zones</span>
+            </div>
+
+            {/* Hotspots Ranking List */}
+            <div className="divide-y divide-slate-100 mt-2">
+              <div
+                onClick={() => setSelectedWard(5)}
+                className="py-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 px-2 rounded-xl transition-colors"
+              >
                 <div>
-                  <span className="text-[11px] font-mono font-bold text-[#087F7B] bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
-                    {selectedReport.complaint_id}
-                  </span>
-                  <h4 className="text-sm font-bold text-[#172B3A] mt-2">
-                    {CATEGORY_LABELS[selectedReport.category]?.label || selectedReport.category}
-                  </h4>
+                  <div className="font-semibold text-xs text-slate-800">Bus Stand Area</div>
+                  <div className="text-[10px] text-slate-400">24 reports • 5 unresolved</div>
                 </div>
-                <StatusBadge status={selectedReport.status} />
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">
+                  High
+                </span>
               </div>
 
-              <div className="space-y-2 text-xs text-[#64748B]">
-                <div className="flex items-start gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#087F7B] shrink-0 mt-0.5" />
-                  <span>
-                    Ward {selectedReport.ward_number || '—'} — {selectedReport.address_locality || 'Navsari'}
-                    {selectedReport.landmark ? ` (${selectedReport.landmark})` : ''}
-                  </span>
+              <div
+                onClick={() => setSelectedWard(8)}
+                className="py-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 px-2 rounded-xl transition-colors"
+              >
+                <div>
+                  <div className="font-semibold text-xs text-slate-800">GIDC Area</div>
+                  <div className="text-[10px] text-slate-400">18 reports • 3 unresolved</div>
                 </div>
-
-                <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 font-mono text-[11px] text-slate-600">
-                  GPS: {selectedReport.latitude?.toFixed(4)}, {selectedReport.longitude?.toFixed(4)}
-                </div>
-
-                <p className="line-clamp-3 text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100 italic">
-                  "{selectedReport.description}"
-                </p>
-
-                <div className="flex items-center justify-between pt-1">
-                  <SlaBadge priority={selectedReport.priority} isResolved={selectedReport.status === 'resolved'} />
-                  <span className="text-[11px] text-slate-400">
-                    {formatDate(selectedReport.submitted_at)}
-                  </span>
-                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700">
+                  Medium
+                </span>
               </div>
 
-              <div className="pt-4 border-t border-slate-100">
-                <Link to={`/admin/reports/${selectedReport.id}`} className="w-full block">
-                  <Button
-                    size="sm"
-                    className="w-full bg-[#087F7B] hover:bg-[#066461] text-white"
-                    rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
-                  >
-                    Open Triage Console
-                  </Button>
-                </Link>
+              <div
+                onClick={() => setSelectedWard(6)}
+                className="py-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 px-2 rounded-xl transition-colors"
+              >
+                <div>
+                  <div className="font-semibold text-xs text-slate-800">Market Area</div>
+                  <div className="text-[10px] text-slate-400">15 reports • 2 unresolved</div>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-700">
+                  Medium
+                </span>
+              </div>
+
+              <div
+                onClick={() => setSelectedWard(11)}
+                className="py-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 px-2 rounded-xl transition-colors"
+              >
+                <div>
+                  <div className="font-semibold text-xs text-slate-800">College Road</div>
+                  <div className="text-[10px] text-slate-400">9 reports • 1 unresolved</div>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">
+                  Low
+                </span>
+              </div>
+
+              <div
+                onClick={() => setSelectedWard(4)}
+                className="py-2.5 flex items-center justify-between cursor-pointer hover:bg-slate-50 px-2 rounded-xl transition-colors"
+              >
+                <div>
+                  <div className="font-semibold text-xs text-slate-800">Lunsikui Area</div>
+                  <div className="text-[10px] text-slate-400">7 reports • 1 unresolved</div>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">
+                  Low
+                </span>
               </div>
             </div>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[#087F7B]">
-                <MapPin className="w-6 h-6" />
+          </div>
+
+          {selectedReport && (
+            <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200/80 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold text-emerald-800">
+                  {selectedReport.complaint_id}
+                </span>
+                <StatusBadge status={selectedReport.status} />
               </div>
-              <p className="text-sm font-semibold text-[#172B3A]">No Pin Selected</p>
-              <p className="text-xs text-[#64748B]">
-                Click on any colored complaint marker or ward area on the map to inspect location telemetry, urgency SLA, and quick actions.
-              </p>
+              <div className="text-xs text-slate-700 font-medium">
+                {CATEGORY_LABELS[selectedReport.category]?.label || selectedReport.category}
+              </div>
+              <Link to={`/admin/reports/${selectedReport.id}`} className="block pt-1">
+                <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs">
+                  Inspect in Workspace &rarr;
+                </Button>
+              </Link>
             </div>
           )}
         </div>

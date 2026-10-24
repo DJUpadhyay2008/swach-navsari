@@ -24,6 +24,9 @@ import { AdminAnalyticsPage } from '@/pages/admin/AdminAnalyticsPage';
 import { AdminStaffPage } from '@/pages/admin/AdminStaffPage';
 import { AdminAuditPage } from '@/pages/admin/AdminAuditPage';
 
+import { IssueMapPage } from '@/pages/IssueMapPage';
+import { ProfilePage } from '@/pages/ProfilePage';
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -53,6 +56,14 @@ export const router = createBrowserRouter([
       {
         path: 'track',
         element: <TrackComplaintPage />,
+      },
+      {
+        path: 'map',
+        element: <IssueMapPage />,
+      },
+      {
+        path: 'profile',
+        element: <ProfilePage />,
       },
       {
         path: 'worker',

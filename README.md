@@ -1,19 +1,19 @@
-# S.W.A.C.H. Navsari
+# My Clean Navsari (S.W.A.C.H. Navsari)
 
-> **Systematic Waste Action & Cleanliness Hub**  
-> *Report. Resolve. Revive.*  
-> Civic cleanliness and community participation platform for Navsari, Gujarat, India.
+> **Clean City • Stronger Community**  
+> *Navsari Municipal Corporation (NMC) Civic Sanitation Platform*  
+> Modern PWA & Desktop Operations Deck for Navsari, Gujarat, India.
 
 ---
 
 ## 1. Overview & Objective
 
-**S.W.A.C.H. Navsari** is an AI-ready civic cleanliness management platform tailored to the municipal jurisdiction of Navsari, Gujarat (covering all 13 municipal civic wards including Dudhia Talav, Lunsikui, Dandi Heritage Corridor, Station Road, and Kaliawadi).
+**My Clean Navsari** is an AI-powered civic cleanliness management platform tailored to the municipal jurisdiction of Navsari, Gujarat (covering all 13 municipal civic wards including Dudhia Talav, Lunsikui, Dandi Heritage Corridor, Station Road, and Kaliawadi).
 
-The platform establishes an end-to-end civic ecosystem connecting three core personas:
-1. **Navsari Citizens:** Submit photo-evidenced waste complaints, track progress via public reference IDs (`NAV-YYYY-XXXXX`), review resolution proof, and join volunteer cleanup drives.
-2. **Municipal Officials:** Triage complaint queues, enforce strict SLA targets, dispatch field sanitation units, review photo proof, and inspect geospatial ward heatmaps.
-3. **Field Sanitation Workers:** Mobile-optimized task board, turn-by-turn GPS directions, real-time status transitions, and photo evidence upload for supervisor verification.
+The platform establishes an end-to-end civic ecosystem connecting three core personas with tailored interfaces:
+1. **Navsari Citizens (Mobile/PWA):** High-fidelity mobile experience featuring 1-tap reporting, AI category classification with confidence scoring, interactive GPS ward map, citizen impact points, and progress tracking timeline (`NMC202610120457`).
+2. **Municipal Officials (Desktop Operations Deck):** Executive light workspace (`#F8FAFC`, white cards, deep navy sidebar) with top KPI metrics, Reports Trend chart, Category Distribution donut with total counts, Recent Reports triage, and City Map Hotspots ranking.
+3. **Field Sanitation Workers (Mobile Portal):** Task board (`Assigned`, `In Progress`, `Completed`), turn-by-turn directions, real-time status transitions, and photo evidence upload for supervisor verification.
 
 ---
 
@@ -242,6 +242,44 @@ Evidence files are stored in **private Supabase Storage buckets**:
 - **Quick-Fill Note Presets:** Touch-friendly buttons (`+ Done & site cleared`, `+ Waste collected and sanitized`, `+ Area completely cleaned`) satisfying statutory minimum character constraints.
 - **Task Categorization:** Live filter tabs for **Active Tasks**, **Under Review**, and **Completed** with instant tab routing on submission.
 - **Demo Mode Fallback:** Interactive seeded task (`NAV-2026-00101`) available when no live assignments are dispatched, allowing end-to-end testing of photo capture and submissions.
+
+---
+
+## 8. UI & UX Architecture (Design Spec Implementation)
+
+### A. Citizen App (Mobile / PWA - 10 Screens)
+1. **Home Screen (`/`):**
+   - Brand banner: "My Clean Navsari" with green leaf icon and NMC badge.
+   - Welcome Hero Card: "Together for a Cleaner, Greener Navsari" with prominent "Report an Issue" CTA button.
+   - 2x2 Quick Action Cards:
+     - `My Reports`: 5 Active
+     - `Nearby Issues`: 12 in 2 km
+     - `Community`: 3 Events
+     - `My Impact`: 120 Points
+   - Nearby Issues feed with category badges and time indicators.
+   - Fixed Mobile Bottom Navigation bar (`BottomNav`): Home, Report, Map, Community, Profile.
+2. **Report an Issue Wizard (`/report`):**
+   - **Step 1 (Photo Evidence):** Camera capture (`capture="environment"`), gallery selector, 5MB validation, and responsive preview container.
+   - **Step 2 (Category Selection):** AI Suggestion card ("Open Garbage Dumping, Confidence: 87%"), interactive radio cards for Open Garbage Dumping, Overflowing Bin, Street Litter, Drainage Waste, and Other.
+   - **Step 3 (Location Confirmation):** Visual map container with GPS pin, "Use Current Location" button, landmark field, and detailed description.
+   - **Step 4 (Submission Confirmation):** Green circular checkmark, Complaint ID card (`NMC202610120457`), View Details link, and 4-stage lifecycle timeline (Review by NMC &rarr; Assigned to team &rarr; Cleaned and verified &rarr; You will be notified).
+3. **Issue Map View (`/map`):**
+   - Real-time GPS plotting of local ward issues, search bar, and floating report preview drawer with GPS coordinates and direction navigation.
+4. **Community Events (`/community`):**
+   - Upcoming cleanup drives (e.g. Navsari River Cleanup Drive, College Community Cleanliness) with participant count, registration buttons, and impact points.
+5. **Profile & Settings (`/profile`):**
+   - Citizen avatar, impact points card (120 Points, 5 Reports, 3 Events), language toggle (English / Gujarati), notification controls, and portal shortcuts.
+
+### B. Municipal Dashboard (Desktop Operations Deck)
+1. **Executive Workspace Theme:**
+   - Crisp light workspace (`#F8FAFC` / `bg-slate-50`), pure white cards (`#FFFFFF`, `border-slate-200`), dark navy sidebar (`#0F172A`), and official header (`Rakesh Desai • Ward Officer`).
+2. **Overview Dashboard (`/admin`):**
+   - Top 4 KPI Cards: **Open Reports (124)**, **Unassigned (28)**, **Overdue (16)**, **Resolved This Month (312)**.
+   - **Reports Trend Chart:** Line chart comparing Submitted vs. Resolved incident flow over 30 days.
+   - **Category Distribution Chart:** Donut chart with Total **523** center metric and color-coded proportional breakdown (Garbage Dumping 38%, Overflowing Bin 26%, Street Litter 18%, Drain Waste 11%, Other 7%).
+   - **Recent Reports Table:** Real-time table with Complaint ID, Category, Location, Status pill badges, Priority tags, and dates.
+3. **City Map & Hotspots (`/admin/map`):**
+   - Geospatial SVG map canvas coupled with a **Hotspots** ranking sidebar (Bus Stand Area, GIDC Area, Market Area, College Road, Lunsikui Area) highlighting unresolved counts and urgency tiers.
 
 ---
 
