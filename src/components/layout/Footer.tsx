@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, MapPin } from 'lucide-react';
+import { PrivacyNoticeModal } from './PrivacyNoticeModal';
 
 export function Footer() {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white text-slate-600 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -71,8 +74,17 @@ export function Footer() {
               Protected by PostgreSQL Row Level Security (RLS) & private Supabase object storage.
               Protected role management prevents privilege escalation.
             </p>
+            <button
+              type="button"
+              onClick={() => setPrivacyOpen(true)}
+              className="text-xs text-emerald-600 font-semibold hover:underline flex items-center gap-1 pt-1"
+            >
+              View Civic Privacy Notice &rarr;
+            </button>
           </div>
         </div>
+
+        <PrivacyNoticeModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
 
         <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>

@@ -284,22 +284,85 @@ Evidence files are stored in **private Supabase Storage buckets**:
 
 ---
 
-## 9. Verification & Scripts
+## 9. Safe Synthetic Demo Mode
 
-| Command | Action | Current Status |
+S.W.A.C.H. Navsari includes an **isolated, deterministic synthetic dataset** designed specifically for hackathon demonstrations, client walkthroughs, and jury presentations without contaminating real municipal operations.
+
+### Key Guarantees & Isolation Principles
+- **Zero Database Pollution:** Synthetic records are never written to, updated, or deleted from real PostgreSQL complaint tables.
+- **Explicit Mode Selection:** Evaluators can toggle between **Live Operations** and **Demo Mode (Simulated)** via the sticky header or navigation controls.
+- **Prominent Visual Indicators:** Every component displaying simulated information renders an unmissable banner:
+  ```
+  [DEMO DATA — SIMULATED: Showing synthetic hackathon demonstration data across Navsari's 13 municipal wards. No real civic complaints are modified.]
+  ```
+- **No Silent Fallbacks:** When running in Live Operations mode, the application displays strictly authentic database records. If a query returns zero records, it displays an honest empty state rather than silently falling back to mock records.
+- **13-Ward Plausible Coverage:** Synthetic reports deterministically cover all 13 municipal wards of Navsari (including Dudhia Talav, Lunsikui, Station Road, Junathana, Viraval, and GIDC) with authentic Gujarati localities and simulated GPS coordinates.
+- **Privacy Minimization:** No real citizen identities, personal emails, or telephone numbers are contained in the synthetic dataset.
+
+---
+
+## 10. Security Audit & Hardening Report
+
+| Security Surface | Audit Assessment | Implemented Mitigation / Hardening |
 | :--- | :--- | :--- |
-| `npm test` | Run Vitest test suite | **76 of 76 tests passing** across 10 test files |
+| **Secrets & Keys** | Verified | Zero private keys or `service_role` secrets exposed. Browser bundle only accesses public `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. `.env` is ignored by Git; `.env.example` contains placeholders only. |
+| **Search Path Security** | Hardened | `generate_complaint_id()` and `set_updated_at()` functions updated with explicit `SET search_path = public` in additive migration `20261025000001_security_hardening.sql`. |
+| **Privilege Escalation** | Protected | Public signups automatically receive only the `citizen` role in `public.user_roles`. Elevated roles (`municipal_official`, `sanitation_worker`) can only be assigned by existing municipal officials. |
+| **Route Guards & Sessions** | Verified | `<AdminGuard>` and `<WorkerGuard>` verify cryptographic sessions against the database `user_roles` table before rendering protected routes. Session signout clears all client state. |
+| **Lifecycle State Machine** | Hardened | Transitions strictly governed by `public.transition_report_status()`. Enforces minimum 5-character rejection reasons and enforces the 72-hour dispute window for citizen complaint reopening. |
+| **Worker History Access** | Fixed | Updated `public.is_assigned_worker()` to include `'completed'` assignments, allowing workers to retain read access to their resolved task history without client-side permission workarounds. |
+| **Private Object Storage** | Verified | Buckets `report-evidence` and `resolution-evidence` are private (`public = false`). Storage RLS restricts object read/write access to verified report stakeholders. 10MB limit and MIME type validation (`jpeg`, `png`, `webp`) enforced. |
+| **Public Complaint Tracking** | Hardened | `public.track_complaint()` returns strictly minimized public fields (no reporter identity, phone, exact coordinates, or private photos). Added high-entropy `tracking_token UUID` column and client-side 500ms lookup throttling to prevent brute-force enumeration. |
+| **Data Privacy Policy** | Documented | Added interactive `<PrivacyNoticeModal />` accessible from the footer and reporting wizard detailing camera/location consent, private evidence lifecycle, and retention guidelines. |
+
+---
+
+## 11. Production Deployment & Hosting Setup
+
+### Recommended Architecture
+- **Frontend Hosting:** [Vercel](https://vercel.com/) (configured with `vercel.json` SPA routing rewrites and HTTP security headers)
+- **Database & Storage:** Supabase managed cloud project (PostgreSQL 15+, RLS, Auth, and Storage)
+
+### Vercel Deployment Configuration (`vercel.json`)
+The repository includes a production-ready `vercel.json` providing:
+1. **SPA Client Routing:** Rewrites all deep links (`/report`, `/track`, `/my-reports`, `/admin/*`, `/worker`) to `/index.html`.
+2. **Security Response Headers:**
+   - `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload`
+   - `X-Frame-Options: DENY`
+   - `X-Content-Type-Options: nosniff`
+   - `Referrer-Policy: strict-origin-when-cross-origin`
+   - `Permissions-Policy: camera=(self), geolocation=(self), microphone=()`
+   - `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' ...`
+3. **Immutable Static Asset Caching:** 1-year cache headers on `/assets/*` bundles.
+
+### Pre-Launch Production Checklist for Project Owner
+- [ ] **Supabase Cloud Project:** Create a new project in the desired cloud region (e.g., AWS Mumbai `ap-south-1`).
+- [ ] **Apply Migrations:** Run sequential migrations (`01` through `06`) or paste `supabase/combined_migrations.sql` in the Supabase SQL Editor.
+- [ ] **Verify Storage Buckets:** Confirm `report-evidence` and `resolution-evidence` exist with `public = false`.
+- [ ] **Site & Redirect URLs:** In Supabase Auth &rarr; URL Configuration, add your production Vercel domain (e.g. `https://swach-navsari.vercel.app`) as the Site URL and Redirect URLs.
+- [ ] **Environment Variables:** Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the Vercel Project Settings &rarr; Environment Variables.
+- [ ] **Initial Municipal Official Provisioning:** Seed or assign the first municipal official user via Supabase SQL:
+  ```sql
+  INSERT INTO public.user_roles (user_id, role)
+  VALUES ('<your-admin-user-uuid>', 'municipal_official')
+  ON CONFLICT DO NOTHING;
+  ```
+- [ ] **Database Backup & Recovery:** Enable daily automated backups and point-in-time recovery (PITR) in Supabase project settings.
+
+---
+
+## 12. Verification & Test Suite
+
+| Command | Action | Results |
+| :--- | :--- | :--- |
+| `npm test` | Run Vitest test suite | **84 of 84 tests passing** across 12 test suites |
 | `npm run lint` | Run ESLint across code and configs | **0 errors, 0 warnings** |
-| `npm run build` | Compile TypeScript and produce production bundle | **Build successful** (Vite built in ~4s) |
+| `npm run build` | TypeScript compile (`tsc -b`) & Vite production bundle | **Build successful** (dist bundle generated with 0 errors) |
 | `npm run dev` | Launch local Vite development server | Ready for local interaction |
 
 ---
 
-## 10. Local Setup & Migrations
-
-### Prerequisites
-- Node.js (v18+) and npm
-- (Optional) Supabase CLI & Docker for running a local Supabase stack
+## 13. Local Setup & Quick Start
 
 ### 1. Install Dependencies
 ```bash
@@ -311,7 +374,7 @@ Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
-Fill in your Supabase project URL and anon public key:
+Populate your Supabase project parameters:
 ```env
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-publishable-key
@@ -322,11 +385,18 @@ VITE_STATE_NAME="Gujarat"
 ```
 
 ### 3. Database Migrations
-Run the migration scripts in sequential order or execute `supabase/combined_migrations.sql`:
-1. `supabase/migrations/20260224000001_initial_schema.sql`
-2. `supabase/migrations/20260224000002_lifecycle_and_functions.sql`
-3. `supabase/migrations/20260224000003_rls_policies.sql`
-4. `supabase/migrations/20260224000004_storage_security.sql`
-5. `supabase/migrations/20260224000005_phase2_citizen_reporting.sql`
-6. `supabase/migrations/20260224000006_role_registration_support.sql`
-7. `supabase/seed.sql`
+Execute the migrations in sequential order or apply `supabase/combined_migrations.sql`:
+1. `supabase/migrations/20260224000001_initial_schema.sql` (Tables, types, sequences, initial user trigger)
+2. `supabase/migrations/20260224000002_lifecycle_and_functions.sql` (Role checks, status transitions, assignment)
+3. `supabase/migrations/20260224000003_rls_policies.sql` (100% table RLS policies, tracking function)
+4. `supabase/migrations/20260224000004_storage_security.sql` (Private storage buckets, path-based storage RLS)
+5. `supabase/migrations/20260224000005_phase2_citizen_reporting.sql` (Location flexibility, initial audit triggers)
+6. `supabase/migrations/20261025000001_security_hardening.sql` (search_path hardening, tracking token, 72h reopen rule, worker history access)
+
+---
+
+## 14. License & Civic Tech Attribution
+
+Developed for the citizens and municipal administration of Navsari, Gujarat, India.  
+**S.W.A.C.H. Navsari** — *Report. Resolve. Revive.*
+

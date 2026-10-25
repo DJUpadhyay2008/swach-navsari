@@ -125,6 +125,7 @@ export type Database = {
           resolved_at: string | null;
           reopened_at: string | null;
           updated_at: string;
+          tracking_token?: string;
         };
         Insert: {
           id?: string;
@@ -146,6 +147,7 @@ export type Database = {
           resolved_at?: string | null;
           reopened_at?: string | null;
           updated_at?: string;
+          tracking_token?: string;
         };
         Update: {
           id?: string;
@@ -167,6 +169,7 @@ export type Database = {
           resolved_at?: string | null;
           reopened_at?: string | null;
           updated_at?: string;
+          tracking_token?: string;
         };
         Relationships: [];
       };

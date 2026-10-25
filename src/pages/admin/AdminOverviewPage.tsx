@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { getAdminOverviewMetrics } from '@/features/admin';
+import { useDemoMode, DemoDataBanner, DemoToggle, getSimulatedAdminMetrics } from '@/lib/demo';
 import {
   ClipboardList,
   AlertCircle,
@@ -21,75 +22,109 @@ interface RecentReport {
   date: string;
 }
 
-const RECENT_REPORTS: RecentReport[] = [
+const DEMO_RECENT_REPORTS: RecentReport[] = [
   {
-    id: 'NMC202610120457',
-    category: 'Garbage Dumping',
-    location: 'Bus Stand',
+    id: 'NAV-2026-00108',
+    category: 'Garbage Dump',
+    location: 'Dudhia Talav [Simulated]',
     status: 'In-Progress',
     priority: 'High',
-    date: '12 Oct',
+    date: 'Today',
   },
   {
-    id: 'NMC202610110321',
-    category: 'Overflowing Bin',
-    location: 'GIDC',
-    status: 'Assigned',
-    priority: 'Medium',
-    date: '11 Oct',
+    id: 'NAV-2026-00104',
+    category: 'Market Waste',
+    location: 'Lunsikui Market [Simulated]',
+    status: 'In-Progress',
+    priority: 'High',
+    date: 'Yesterday',
   },
   {
-    id: 'NMC202610100021',
-    category: 'Street Litter',
-    location: 'College Road',
+    id: 'NAV-2026-00098',
+    category: 'Drain Overflow',
+    location: 'Dandi Heritage [Simulated]',
     status: 'Resolved',
-    priority: 'Low',
-    date: '10 Oct',
+    priority: 'High',
+    date: '21 Oct',
   },
   {
-    id: 'NMC202610090137',
-    category: 'Drain Waste',
-    location: 'Lunsikui Area',
+    id: 'NAV-2026-00105',
+    category: 'Open Burning',
+    location: 'Lunsikui Ring Rd [Simulated]',
     status: 'Overdue',
     priority: 'High',
-    date: '09 Oct',
+    date: '25 Oct',
   },
 ];
 
 export function AdminOverviewPage() {
+  const { isDemoMode } = useDemoMode();
+
   const { data: metrics, refetch, isFetching } = useQuery({
     queryKey: ['admin-overview-metrics'],
     queryFn: getAdminOverviewMetrics,
+    enabled: !isDemoMode,
   });
 
-  // Numbers matching mockup (or live if greater)
-  const openReportsCount = metrics?.totalComplaints ? Math.max(metrics.totalComplaints, 124) : 124;
-  const unassignedCount = metrics?.submittedCount ? Math.max(metrics.submittedCount, 28) : 28;
-  const overdueCount = metrics?.overdueCount ? Math.max(metrics.overdueCount, 16) : 16;
-  const resolvedCount = metrics?.resolvedCount ? Math.max(metrics.resolvedCount, 312) : 312;
+  // Calculate isolated metrics based on mode
+  const simulatedMetrics = getSimulatedAdminMetrics();
+
+  const openReportsCount = isDemoMode
+    ? simulatedMetrics.totalComplaints - simulatedMetrics.resolvedCount
+    : (metrics?.submittedCount ?? 0) +
+      (metrics?.underReviewCount ?? 0) +
+      (metrics?.assignedCount ?? 0) +
+      (metrics?.inProgressCount ?? 0);
+
+  const unassignedCount = isDemoMode
+    ? simulatedMetrics.submittedCount
+    : metrics?.submittedCount ?? 0;
+
+  const overdueCount = isDemoMode
+    ? simulatedMetrics.overdueCount
+    : metrics?.overdueCount ?? 0;
+
+  const resolvedCount = isDemoMode
+    ? simulatedMetrics.resolvedCount
+    : metrics?.resolvedCount ?? 0;
 
   return (
     <div className="space-y-6">
+      {/* Demo Banner */}
+      <DemoDataBanner />
+
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
+            {isDemoMode && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                SIMULATED DATA
+              </span>
+            )}
+          </div>
           <p className="text-xs text-slate-500 mt-0.5">
             Navsari Municipal Corporation • Real-Time Sanitation Overview
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => refetch()}
-            isLoading={isFetching}
-            className="border-slate-300 text-slate-700 hover:bg-slate-100"
-            leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-          >
-            Refresh
-          </Button>
+          <DemoToggle />
+
+          {!isDemoMode && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => refetch()}
+              isLoading={isFetching}
+              className="border-slate-300 text-slate-700 hover:bg-slate-100"
+              leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+            >
+              Refresh
+            </Button>
+          )}
+
           <Link to="/admin/reports">
             <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium">
               View All Reports
@@ -418,7 +453,7 @@ export function AdminOverviewPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {RECENT_REPORTS.map((row) => (
+              {DEMO_RECENT_REPORTS.map((row) => (
                 <tr key={row.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-3.5 px-5 font-mono font-medium text-slate-900">
                     <Link

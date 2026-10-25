@@ -1,6 +1,7 @@
 import { Menu, LogOut, Search, Bell } from 'lucide-react';
 import { useAuth } from '@/features/auth';
 import { Link } from 'react-router-dom';
+import { DemoToggle } from '@/lib/demo';
 
 interface AdminHeaderProps {
   onOpenMobileNav: () => void;
@@ -32,6 +33,8 @@ export function AdminHeader({ onOpenMobileNav }: AdminHeaderProps) {
 
       {/* Right: Quick actions & Official Identity */}
       <div className="flex items-center gap-3">
+        <DemoToggle />
+
         {/* Quick Search */}
         <Link
           to="/admin/reports"

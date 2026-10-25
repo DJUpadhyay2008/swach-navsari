@@ -16,9 +16,9 @@ import {
   getWorkerTasks,
   startWorkOnAssignment,
   submitResolutionEvidence,
-  DEMO_WORKER_TASKS,
   type WorkerTask,
 } from '@/features/worker';
+import { useDemoMode, DemoDataBanner, DemoToggle, SIMULATED_WORKER_TASKS } from '@/lib/demo';
 import {
   HardHat,
   MapPin,
@@ -39,6 +39,7 @@ export function WorkerPortalPage() {
   const { user, profile } = useAuth();
   const queryClient = useQueryClient();
   const backendConfigured = isSupabaseConfigured();
+  const { isDemoMode } = useDemoMode();
 
   // Active filter tab
   const [filterTab, setFilterTab] = useState<'active' | 'review' | 'resolved' | 'all'>('active');
@@ -64,22 +65,21 @@ export function WorkerPortalPage() {
   } = useQuery({
     queryKey: ['worker-tasks', user?.id],
     queryFn: () => (user?.id ? getWorkerTasks(user.id) : Promise.resolve([])),
-    enabled: Boolean(user?.id),
-    refetchInterval: 3000,
+    enabled: Boolean(user?.id) && !isDemoMode,
+    refetchInterval: isDemoMode ? false : 3000,
     refetchOnWindowFocus: true,
   });
 
-  // Decide which base tasks to display:
-  // If backend returned tasks for this worker, use them.
-  // Otherwise, fallback to the interactive DEMO_WORKER_TASKS so the worker has immediate functionality.
+  // Strict isolation: When in Demo Mode, display simulated worker tasks.
+  // When in Live Operations, display ONLY fetched tasks from database (no silent fallback).
   const baseTasks = useMemo(() => {
-    if (fetchedTasks && fetchedTasks.length > 0) {
-      return fetchedTasks;
+    if (isDemoMode) {
+      return SIMULATED_WORKER_TASKS;
     }
-    return DEMO_WORKER_TASKS;
-  }, [fetchedTasks]);
+    return fetchedTasks || [];
+  }, [isDemoMode, fetchedTasks]);
 
-  const isUsingDemo = !fetchedTasks || fetchedTasks.length === 0;
+  const isUsingDemo = isDemoMode;
 
   // Merge with any local optimistic status transitions for demo tasks only,
   // ensuring real tasks always reflect live database lifecycle status (assigned, in_progress, resolution_submitted, resolved)
@@ -275,17 +275,24 @@ export function WorkerPortalPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            leftIcon={<RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />}
-            onClick={() => refetch()}
-            disabled={isFetching}
-          >
-            {isFetching ? 'Refreshing...' : 'Refresh Tasks'}
-          </Button>
+          <DemoToggle />
+
+          {!isDemoMode && (
+            <Button
+              size="sm"
+              variant="outline"
+              leftIcon={<RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />}
+              onClick={() => refetch()}
+              disabled={isFetching}
+            >
+              {isFetching ? 'Refreshing...' : 'Refresh Tasks'}
+            </Button>
+          )}
         </div>
       </div>
+
+      {/* Demo Banner */}
+      <DemoDataBanner />
 
       {/* Backend & Scoping Notice */}
       {!backendConfigured ? (

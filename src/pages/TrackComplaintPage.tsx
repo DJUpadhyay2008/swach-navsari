@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { complaintTrackSchema, ComplaintTrackInput } from '@/lib/validation/repo
 import { isSupabaseConfigured, getSupabase } from '@/lib/supabase/client';
 import { STATUS_CONFIG, PRIORITY_CONFIG, formatDate } from '@/lib/utils';
 import type { ComplaintStatus, ComplaintPriority } from '@/types';
+import { useDemoMode, DemoDataBanner, DemoToggle, SIMULATED_REPORTS } from '@/lib/demo';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -30,13 +31,16 @@ interface DisplayReport {
   submitted_at: string;
   resolved_at: string | null;
   reopened_at: string | null;
+  isSimulated?: boolean;
 }
 
 export function TrackComplaintPage() {
   const backendConfigured = isSupabaseConfigured();
+  const { isDemoMode } = useDemoMode();
   const [loading, setLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [reportResult, setReportResult] = useState<DisplayReport | null>(null);
+  const lastSearchTimeRef = useRef<number>(0);
 
   const {
     register,
@@ -51,48 +55,61 @@ export function TrackComplaintPage() {
   });
 
   const onSearch = async (data: ComplaintTrackInput) => {
+    // Abuse protection: 500ms rate limit throttle
+    const now = Date.now();
+    if (now - lastSearchTimeRef.current < 500) {
+      return;
+    }
+    lastSearchTimeRef.current = now;
+
     setLoading(true);
     setSearchError(null);
     setReportResult(null);
 
-    if (!backendConfigured) {
-      // Local development preview mode using seed data reference
+    const queryKey = data.complaint_id.trim().toUpperCase();
+
+    // 1. If in Demo Mode, search isolated synthetic dataset
+    if (isDemoMode) {
       setTimeout(() => {
-        if (data.complaint_id.toUpperCase() === 'NAV-2026-00101') {
+        const found = SIMULATED_REPORTS.find(
+          (r) =>
+            r.complaint_id.toUpperCase() === queryKey ||
+            r.tracking_token?.toUpperCase() === queryKey
+        );
+
+        if (found) {
           setReportResult({
-            complaint_id: 'NAV-2026-00101',
-            category: 'garbage_dump',
-            status: 'in_progress',
-            priority: 'high',
-            ward_number: 7,
-            address_locality: 'Dudhia Talav Lakeside Promenade, Navsari',
-            submitted_at: new Date(Date.now() - 28 * 3600 * 1000).toISOString(),
-            resolved_at: null,
-            reopened_at: null,
-          });
-        } else if (data.complaint_id.toUpperCase() === 'NAV-2026-00098') {
-          setReportResult({
-            complaint_id: 'NAV-2026-00098',
-            category: 'sewage_overflow',
-            status: 'resolved',
-            priority: 'urgent',
-            ward_number: 2,
-            address_locality: 'Dandi Heritage Highway Approach',
-            submitted_at: new Date(Date.now() - 72 * 3600 * 1000).toISOString(),
-            resolved_at: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
-            reopened_at: null,
+            complaint_id: found.complaint_id,
+            category: found.category,
+            status: found.status,
+            priority: found.priority,
+            ward_number: found.ward_number || 1,
+            address_locality: found.address_locality || 'Navsari',
+            submitted_at: found.submitted_at,
+            resolved_at: found.resolved_at,
+            reopened_at: found.reopened_at,
+            isSimulated: true,
           });
         } else {
           setSearchError(
-            `No complaint record found matching '${data.complaint_id}'. (Try demo seed ID: NAV-2026-00101 or NAV-2026-00098)`
+            `No simulated demo complaint found matching '${data.complaint_id}'. (Try demo ID: NAV-2026-00101, NAV-2026-00104, or NAV-2026-00098)`
           );
         }
         setLoading(false);
-      }, 300);
+      }, 200);
       return;
     }
 
-    // Live Supabase query using trusted security definer function track_complaint
+    // 2. If backend is unconfigured and not in demo mode
+    if (!backendConfigured) {
+      setSearchError(
+        'Supabase backend credentials are not yet configured. Switch on Demo Mode to test with simulated data, or configure VITE_SUPABASE_URL in .env.'
+      );
+      setLoading(false);
+      return;
+    }
+
+    // 3. Live Supabase query using trusted security definer function track_complaint
     const client = getSupabase();
     if (!client) {
       setSearchError('Could not initialize Supabase client.');
@@ -102,13 +119,13 @@ export function TrackComplaintPage() {
 
     try {
       const { data: records, error } = await client.rpc('track_complaint', {
-        p_complaint_id: data.complaint_id.trim().toUpperCase(),
+        p_complaint_id: queryKey,
       });
 
       if (error) {
         setSearchError(error.message);
       } else if (!records || records.length === 0) {
-        setSearchError(`No complaint found with ID '${data.complaint_id}'.`);
+        setSearchError(`No complaint found with Reference ID '${data.complaint_id}'.`);
       } else {
         const first = records[0];
         if (first) {
@@ -122,6 +139,7 @@ export function TrackComplaintPage() {
             submitted_at: first.submitted_at,
             resolved_at: first.resolved_at,
             reopened_at: first.reopened_at,
+            isSimulated: false,
           });
         }
       }
@@ -143,15 +161,23 @@ export function TrackComplaintPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8">
+      {/* Demo Banner */}
+      <DemoDataBanner />
+
       {/* Title */}
-      <div className="space-y-2">
-        <Badge variant="default">Public Tracking</Badge>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-          Track Waste Complaint Status
-        </h1>
-        <p className="text-sm text-slate-500">
-          Enter your safe Complaint Identifier (NAV-YYYY-XXXXX) to check real-time municipal action and evidence.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="space-y-2">
+          <Badge variant="default">Public Tracking</Badge>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+            Track Waste Complaint Status
+          </h1>
+          <p className="text-sm text-slate-500">
+            Enter your safe Complaint Identifier (NAV-YYYY-XXXXX) to check real-time municipal action.
+          </p>
+        </div>
+        <div>
+          <DemoToggle />
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -181,13 +207,20 @@ export function TrackComplaintPage() {
 
           {/* Quick Demo Seed Pills */}
           <div className="mt-3 flex items-center gap-2 text-xs text-slate-500 flex-wrap">
-            <span>Demo seed references:</span>
+            <span>Demo sample references:</span>
             <button
               type="button"
               onClick={() => setValue('complaint_id', 'NAV-2026-00101')}
               className="text-emerald-700 hover:underline font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
             >
-              NAV-2026-00101 (Dudhia Talav)
+              NAV-2026-00101 (Grid Substation)
+            </button>
+            <button
+              type="button"
+              onClick={() => setValue('complaint_id', 'NAV-2026-00104')}
+              className="text-emerald-700 hover:underline font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
+            >
+              NAV-2026-00104 (Lunsikui Market)
             </button>
             <button
               type="button"
@@ -212,7 +245,7 @@ export function TrackComplaintPage() {
           <Card className="bg-white border border-slate-200 shadow-xs">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-xl font-bold text-slate-900 tracking-wider">
                     {reportResult.complaint_id}
                   </span>
@@ -223,6 +256,11 @@ export function TrackComplaintPage() {
                   >
                     {STATUS_CONFIG[reportResult.status].label}
                   </span>
+                  {reportResult.isSimulated && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                      DEMO DATA — SIMULATED
+                    </span>
+                  )}
                 </div>
                 <div className="text-xs text-slate-500 mt-1 flex items-center gap-3">
                   <span className="flex items-center gap-1">

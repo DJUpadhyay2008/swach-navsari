@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { useAuth } from '@/features/auth';
+import { DemoToggle } from '@/lib/demo';
 import {
   Sparkles,
   ClipboardList,
@@ -132,6 +133,8 @@ export function Header() {
 
           {/* Right Action & Backend / Auth indicators */}
           <div className="hidden md:flex items-center gap-3">
+            <DemoToggle />
+
             <div
               className={cn(
                 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs border font-medium transition-colors',
@@ -236,6 +239,11 @@ export function Header() {
               <span>Report Waste</span>
             </Link>
           )}
+
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-xs text-slate-500 font-medium">Demo Dataset:</span>
+            <DemoToggle />
+          </div>
 
           <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
             {user ? (
